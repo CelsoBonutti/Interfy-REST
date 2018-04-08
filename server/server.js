@@ -1,7 +1,18 @@
+var env = process.env.NODE_ENV || 'development';
+console.log('env *****', env);
+
+if(env === 'development'){
+  process.env.PORT = 8000;
+  process.env.MONGO_STR = 'mongodb://localhost:27017/dev';
+}else if(env === 'test'){
+  process.env.PORT = 8000;
+  process.env.MONGO_STR = 'mongodb://localhost:27017/test'
+}
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 var {ObjectId} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose');
@@ -95,6 +106,21 @@ app.patch('/todos/:id', (req, res) =>{
     })
 })
 
+app.get('/todos', (req, res) =>{
+  Todo.find().then((todos)=>{
+    res.send({todos});
+  }, (e) =>{
+    res.status(400).send(e);
+  });
+})
+
+app.post('/users', (req, res) =>{
+  User.find().then((user)=>{
+    res.send({user});
+  }, (e)=>{
+    res.status(400).send(e);
+  });
+});
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
