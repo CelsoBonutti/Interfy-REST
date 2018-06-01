@@ -40,10 +40,10 @@ var CargaHorariaSchema = new mongoose.Schema({
         type: String,
         required: ture
     },
-    turno: {
+    turno: [{
         type: TurnoSchema,
         required: true
-    }
+    }]
 })
 
 var CursoSchema = new mongoose.Schema({
@@ -51,9 +51,6 @@ var CursoSchema = new mongoose.Schema({
         type: String,
         required: true,
         minlength: 5
-    },
-    descricao: {
-        type: String
     },
     descricao: {
         type: String,
@@ -80,10 +77,6 @@ var CursoSchema = new mongoose.Schema({
 CursoSchema.methods.calcularValor = function(){
     var preco = this.cargaHoraria.turno.calcularValor(this.numeroSemanas())*this.numeroSemanas();
     return preco;
-}
-
-CursoSchema.methods.numeroSemanas = function(){
-    // var nuSemanas = datasInicio-datasFim/7;
 }
 
 CargaHorariaSchema.methods.calcularValor = function(numeroSemanas){
