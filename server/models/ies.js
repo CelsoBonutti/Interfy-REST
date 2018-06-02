@@ -47,3 +47,11 @@ var InstituicaoSchema = new mongoose.Schema({
         required: true,
     }
 })
+
+InstituicaoSchema.statics.findByFilter = function(){
+    return InstituicaoSchema.findBy(filter);
+}
+
+var Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
+
+module.exports = {Instituicao};

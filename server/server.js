@@ -9,6 +9,7 @@ if(env === 'development'){
   process.env.MONGO_STR = 'mongodb://localhost:27017/test'
 }
 
+//Bibliotecas
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -16,9 +17,15 @@ const port = process.env.PORT;
 const jwt = require('jsonwebtoken');
 var {ObjectId} = require('mongodb');
 
+//Models
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
+var {Instituicao} = require('./models/ies');
+var {Curso} = require('./models/curso');
+
+
+//Middleware
 var {authenticate} = require('./middleware/authenticate')
 
 var app = express();
@@ -56,6 +63,23 @@ app.post('/users/login', (req, res)=>{
 
 app.delete('/users/login', (req, res)=>{
   
+})
+
+app.get('/escolas', (req, res)=>{
+  var filter = function(req){
+    if (req.query.idioma)
+      this.idioma = req.query.idioma;
+    if (req.query.cidade)
+      this.cidade = req.query.cidade;
+    if (req.query.tipoCurso)
+      this.tipoCurso = req.query.tipoCurso;
+    if (req.query.horario)
+      this.horario = req.query.horario;
+    if (req.query.cargaHoraria)
+      this.cargaHoraria = req.query.cargaHoraria;
+  }
+  var listaEscolas = Instituicao.findByFilter(filter);
+  res.send(listaEscolas).status(200);
 })
 
 app.listen(port, () => {

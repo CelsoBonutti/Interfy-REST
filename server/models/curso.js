@@ -87,6 +87,10 @@ CargaHorariaSchema.methods.calcularValor = function(numeroSemanas){
     });
 }
 
+CursoSchema.statics.findByFilter = function(filter){
+    return CursoSchema.findBy(filter);
+}
+
 var Curso = mongoose.model('Curso', CursoSchema);
 
 module.exports = {Curso};
