@@ -37,14 +37,6 @@ var IntercambioSchema = new mongoose.Schema({
     }
 })
 
-
-IntercambioSchema.methods.numeroSemanas = function(){
-    var dataInicio = moment(this.curso.datasInicio[0]);
-    var dataFim = moment(this.curso.datasInicio[0]);
-    
-    return dataFim.diff(dataInicio, 'weeks');
-}
-
 IntercambioSchema.methods.calcularValor = function() {
     var valor = this.curso.calcularValor();
     extras.foreach(extra =>{
