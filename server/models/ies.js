@@ -4,10 +4,6 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const { Curso } = require('./curso');
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 7af0b5f68a81f36e4e284be8f051a04929d24e6d
 var InstituicaoSchema = new mongoose.Schema({
     nome: {
         type: String,
@@ -30,47 +26,13 @@ var InstituicaoSchema = new mongoose.Schema({
     diferenciais: {
         type: [diferencialSchema]
     },
-<<<<<<< HEAD
-=======
     cursos: {
         type: [CursoSchema]
     },
->>>>>>> 7af0b5f68a81f36e4e284be8f051a04929d24e6d
     fotos: {
         type: [String],
         required: true,
     },
-<<<<<<< HEAD
-    cursos: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Curso'
-    }]
-})
-
-InstituicaoSchema.statics.findAndFilter = function (filter) {
-    return this.find({
-        pais: {$in: [filter.paises]},
-        cidade: {$in: [filter.cidades]}
-    }).then().populate({
-        path: 'cursos',
-        populate: {
-            path: 'cargaHoraria',
-            populate: {
-                path: 'turno',
-                model: 'Turno',
-                descricao: { $in: [filter.descricaoTurno] }
-            },
-            match: {
-                descricao: { $in: [filter.descricaoCarga] }
-            }
-        },
-        match: {
-            titulo: filter.titulo
-        }
-    }).populate({
-        path: 'diferenciais'
-    })
-=======
     diferenciais: [{
         descricao: {
             type: String,
@@ -108,9 +70,27 @@ InstituicaoSchema.statics.findAndFilter = function (filter) {
     }]
 })
 
-InstituicaoSchema.statics.findByFilter = function () {
-    return InstituicaoSchema.findBy(filter);
->>>>>>> 7af0b5f68a81f36e4e284be8f051a04929d24e6d
+InstituicaoSchema.statics.findAndFilter = function (filter) {
+    return this.find({
+        pais: {$in: [filter.paises]},
+        cidade: {$in: [filter.cidades]}
+    }).then().populate({
+        path: 'cursos',
+        populate: {
+            path: 'cargaHoraria',
+            populate: {
+                path: 'turno',
+                model: 'Turno',
+                descricao: { $in: [filter.descricaoTurno] }
+            },
+            match: {
+                descricao: { $in: [filter.descricaoCarga] }
+            }
+        },
+        match: {
+            titulo: filter.titulo
+        }
+    })
 }
 
 var Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
