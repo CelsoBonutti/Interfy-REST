@@ -66,18 +66,6 @@ app.delete('/users/login', (req, res)=>{
 })
 
 app.get('/escolas', (req, res)=>{
-  var filter = function(req){
-    if (req.query.idioma)
-      this.idioma = req.query.idioma;
-    if (req.query.cidade)
-      this.cidade = req.query.cidade;
-    if (req.query.tipoCurso)
-      this.tipoCurso = req.query.tipoCurso;
-    if (req.query.horario)
-      this.horario = req.query.horario;
-    if (req.query.cargaHoraria)
-      this.cargaHoraria = req.query.cargaHoraria;
-  }
   var listaEscolas = Instituicao.findByFilter(filter);
   res.send(listaEscolas).status(200);
 })

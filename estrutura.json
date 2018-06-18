@@ -1,0 +1,162 @@
+{
+    "escolas": [
+        {
+            "_id": ObjectId(""),
+            "nome": String,
+            "pais": String,
+            "cidade": String,
+            "imagens": [Data
+            ],
+            "diferenciais": [Diferenciais
+            ],
+            "cursos": [curso
+            ]
+        }
+    }
+
+{
+        "cursos": [
+            {
+                "_id": ObjectId(""),
+                "titulo": String,
+                "descricao": String,
+                "cargas": [cargaHoraria
+                ]
+            }
+        ]
+    }
+
+{
+        "cargaHoraria": [
+            {
+                "_id": ObjectId,
+                "descricao": String,
+                "turno": [turno
+                ]
+            }
+        ]
+    }
+
+{
+        "turnos": [
+            {
+                "_id": ObjectId,
+                "nome": String,
+                "descricao": String,
+                "duracao": [
+                    {
+                        "numeroSemanas": Number,
+                        "valor": Number,
+                datas: [Date
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+{
+        "paises": [],
+        "cidades": [],
+        "tipoCurso": ,
+        "cargaHoraria": ,
+        "turno":
+    }
+
+
+Exemplo: {
+        "escolas": [
+            {
+                "_id": ObjectId("54cd6669d3e0fb1b302e54e6"),
+                "nome": "Memes School",
+                "pais": "Zimbabwe",
+                "cidade": "Harare",
+                "diferenciais": []
+        "cursos": [
+                    {
+                        "titulo": "Inglês geral",
+                        "_id": ObjectId("54cd6669d3e0fb1b302e54e8"),
+                        "cargaHoraria": [
+                            {
+                                "descricao": "Leve",
+                                "horasSemanais": "7.5",
+                                "nuAulas": "10",
+                                "duracaoAula": "45",
+                                "turno": [
+                                    {
+                                        "nome": "Matutino",
+                                        "descricao": "Bozzaninho",
+                                        "duracao": [
+                                            {
+                                                "numeroSemanas": "1",
+                                                "valor": "150.00",
+                                                "datas": [
+                                '03-10-2018',
+                                '02-11-2018'
+                                                ]
+                                            },
+                                            {
+                                                "numeroSemanas": "8",
+                                                "valor": "120.00",
+                                                "datas": ['02-11-2018'
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "descricao": "Moderado",
+                                "horasSemanais": "15",
+                                "nuAulas": "20",
+                                "duracaoAula": "45",
+                                "turno": [
+                                    {
+                                        "nome": "Matutino",
+                                        "descricao": "Bozzaninho",
+                                        "duracao": [
+                                            {
+                                                "numeroSemanas": "1",
+                                                "valor": "150.00",
+                                                "datas": [
+                                '03-10-2018',
+                                '02-11-2018'
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "titulo": "Preparatório IELTS",
+                        "_id": ObjectId("54cd6669d3e0fb1b302e54e8"),
+                        "cargaHoraria": [
+                            {
+                                "descricao": "Intensivo",
+                                "horasSemanais": "22.5",
+                                "nuAulas": "30",
+                                "duracaoAula": "45",
+                                "turno": [
+                                    {
+                                        "nome": "Matutino",
+                                        "descricao": "Bozzaninho",
+                                        "duracao": [
+                                            {
+                                                "numeroSemanas": "12",
+                                                "valor": "500.00",
+                                                "datas": ['03-10-2018'
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "__v": 0
+            }
+        ]
+    }
