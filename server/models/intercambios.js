@@ -127,9 +127,16 @@ var IntercambioSchema = new mongoose.Schema({
     }]
 })
 
+<<<<<<< HEAD
 IntercambioSchema.methods.calcularValor = function () {
     var valor = this.curso.valor;
     this.adicionais.foreach(adicional => {
         valor += adicionais.valor;
+=======
+IntercambioSchema.methods.calcularValor = function() {
+    var valor = this.curso.calcularValor();
+    extras.foreach(extra =>{
+        valor+=extra.valor;
+>>>>>>> 7af0b5f68a81f36e4e284be8f051a04929d24e6d
     });
 }
