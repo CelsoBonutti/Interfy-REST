@@ -4,92 +4,26 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const Curso = require('./curso');
 
-var PessoaSchema = new mongoose.Schema({
-    nome: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        validate: {
-            validator: validator.isEmail,
-            message: '{VALUE} não é um e-mail válido.'
-        }
-    },
-    cpf: {
-        type: Number,
-        required: true,
-        validate: {
-            //código para verificar se é CPF
-        }
-    },
-    telefone: {
-        type: Number,
-        required: true,
-        validate: {
-            //código para validar se é telefone
-        }
-    }
-})
-
 var IntercambioSchema = new mongoose.Schema({
     adicionais: {
-        type: [AdicionalSchema]
-    },
-    responsavel: {
-        type: PessoaSchema,
-        required: true
-    },
-    estudante: [{
-        pessoa: {
-            type: PessoaSchema
-        },
-        dtNascimento: {
-            type: Date,
-            required: true
-        },
-        sexo: {
-            type: String,
-            required: true,
-            maxlength: 1
-        },
-        conhecimento: {
+        descricao: {
             type: String,
             required: true
         },
-        informacoesMedicas: [{
-            alergia: {
-                type: String
-            },
-            restricaoAlimentar: {
-                type: String
-            }
-        }]
-    }],
-    contatoEmergencia: [{
-        nome: {
+        icone: {
             type: String,
             required: true
         },
-        parentesco: {
-            type: String,
-            required: true
-        },
-        telefone: {
+        valor: {
             type: Number,
-            required: true
-        },
-        email: {
-            type: String,
             required: true,
             validate: {
-                validator = validator.isEmail,
-                message: '{VALUE} não é um e-mail válido.'
+                validator: validator.isCurrency,
+                message: '{VALUE} não é um valor válido.'
             }
         }
-    }],
-    curso: [{
+    },
+    curso: {
         tipo: {
             type: String,
             required: true
@@ -114,29 +48,42 @@ var IntercambioSchema = new mongoose.Schema({
             type: Date,
             required: true
         },
-        instituicao:{
-            type: mongoose.Types.ObjectId,
+        instituicao: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Instituicao'
         },
-        valor:{
+        valor: {
             type: Number,
-            validate:{
+            validate: {
                 validator: validator.isCurrency
             }
+        },
+        _userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
         }
-    }]
+    }
 })
 
-<<<<<<< HEAD
 IntercambioSchema.methods.calcularValor = function () {
     var valor = this.curso.valor;
     this.adicionais.foreach(adicional => {
         valor += adicionais.valor;
-=======
-IntercambioSchema.methods.calcularValor = function() {
-    var valor = this.curso.calcularValor();
-    extras.foreach(extra =>{
-        valor+=extra.valor;
->>>>>>> 7af0b5f68a81f36e4e284be8f051a04929d24e6d
     });
 }
+
+IntercambioSchema.statics.findByUserIdAndPopulate = function (_userId) {
+    var Intercambio = this;
+
+    return Intercambio.find({ _userId }).then().populate({
+        path: 'instituicao',
+        select: 'nome'
+    })
+}
+
+
+
+var Intercambio = mongoose.model('Intercambio', IntercambioSchema);
+
+module.exports = { Intercambio };

@@ -34,14 +34,14 @@ var PaisSchema = new mongoose.Schema({
     },
     vistos: {
         type: [{
-            nome:{
+            nome: {
                 type: String,
                 required: true
             },
-            dificuldade:{
+            dificuldade: {
                 type: Number,
                 min: 0,
-                max: 5 
+                max: 5
             }
         }]
     },
@@ -75,10 +75,10 @@ var PaisSchema = new mongoose.Schema({
     }
 })
 
-PaisSchema.methods.converteMoeda = function(){
+PaisSchema.methods.converteMoeda = function () {
     currencyConvert('BRL', this.moeda).then((valor) => {
         return valor;
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err);
     })
 }

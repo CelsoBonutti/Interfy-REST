@@ -15,14 +15,10 @@ var CursoSchema = new mongoose.Schema({
         required: true
     },
     cargaHoraria: [{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'CargaHoraria'
     }]
 })
-
-CursoSchema.statics.findByEscola = function (idEscola, filters) {
-
-}
 
 var Curso = mongoose.model('Curso', CursoSchema);
 

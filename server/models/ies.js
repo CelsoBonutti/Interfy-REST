@@ -13,22 +13,21 @@ var InstituicaoSchema = new mongoose.Schema({
         unique: false,
     },
     pais: {
-        type: string,
+        type: String,
         minlength: 2,
         maxlength: 2,
         required: true
     },
     cidade: {
-        type: string,
+        type: String,
         maxlength: 20,
         required: true
     },
-    diferenciais: {
-        type: [diferencialSchema]
-    },
-    cursos: {
-        type: [CursoSchema]
-    },
+    cursos: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Curso',
+        required: true
+    }],
     fotos: {
         type: [String],
         required: true,
@@ -45,7 +44,7 @@ var InstituicaoSchema = new mongoose.Schema({
     }],
     comentarios: {
         usuario: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true
         },
@@ -71,9 +70,13 @@ var InstituicaoSchema = new mongoose.Schema({
 })
 
 InstituicaoSchema.statics.findAndFilter = function (filter) {
+    
     return this.find({
-        pais: {$in: [filter.paises]},
-        cidade: {$in: [filter.cidades]}
+        $cond: {
+            if: { $gte: ["$size: $$filter.cidades", 0] },
+            then: {cidade: {$in: [filter.cidades]}},
+            else: {}
+        }
     }).then().populate({
         path: 'cursos',
         populate: {
@@ -81,14 +84,26 @@ InstituicaoSchema.statics.findAndFilter = function (filter) {
             populate: {
                 path: 'turno',
                 model: 'Turno',
-                descricao: { $in: [filter.descricaoTurno] }
+                match: {
+                    $cond: {
+                        if: { $gte: ["$size: $$filter.descricaoTurno", 0] },
+                        then: {descricao: {$in: [filter.descricaoTurno]}},
+                        else: {}}
+                }
             },
             match: {
-                descricao: { $in: [filter.descricaoCarga] }
+                $cond: {
+                    if: { $gte: ["$size: $$filter.descricaoCarga", 0] },
+                    then: {descricao: {$in: [filter.descricaoCarga]}},
+                    else: {}}
             }
         },
         match: {
-            titulo: filter.titulo
+            $cond: {
+                if: {$eq: ["$$filter.tituloCurso", null]},
+                then: {},
+                else: {titulo: filter.titulo}
+            }
         }
     })
 }

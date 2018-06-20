@@ -10,7 +10,7 @@ var CargaHorariaSchema = new mongoose.Schema({
         required: true
     },
     turno: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Turno'
     }]
 })
