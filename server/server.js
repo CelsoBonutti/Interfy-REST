@@ -33,15 +33,11 @@ var app = express();
 app.use(bodyParser.json());
 
 app.post('/users/register', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password']);
+  var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'sexo']);
+  body.isAdmin = false;
   var user = new User(body);
-  var informacoes = _.pick(req.body, ['nome', 'sobrenome', 'telefone', 'dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
 
   user.save().then(() => {
-    informacoes._userId = user._id;
-    var informacoesUsuario = new Informacoes(informacoes);
-    return informacoesUsuario.save();
-  }).then(() => {
     return user.generateAuthToken();
   }).then((token) => {
     res.header('x-auth', token).send(user);
@@ -84,7 +80,7 @@ app.get('/info/me', authenticate, (req, res) => {
 
 app.patch('/info/:id', authenticate, (req, res) => {
   var id = req.params.id;
-  var novasInformacoes = _.pick(req.body, ['nome', 'sobrenome', 'telefone', 'dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
+  var novasInformacoes = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
@@ -109,8 +105,13 @@ app.get('/intercambios', authenticate, (req, res) =>{
 //   var listaEscolas = Instituicao.findByFilter(filter).then(())
 // })
 
-app.post('/escolas/register', (req, res) => {
-
+app.post('/escolas/register', authenticate, (req, res) => {
+  if (!req.user.admin){
+    return res.status(401).send();
+  }
+  else{
+    
+  }
 })
 
 app.listen(port, () => {

@@ -12,14 +12,40 @@ var UserSchema = new mongoose.Schema({
     minlength: 1,
     unique: true,
     validate: {
-      validator: validator.isEmail,
-      message: '{VALUE} não é um e-mail válido'
+      validator: function(email){
+        return validator.isEmail(email);
+      },
+      message: '{VALUE} não é um e-mail válido.'
     }
   },
   password: {
     type: String,
     require: true,
     minlength: 8
+  },
+  nome: {
+    type: String,
+    required: true
+  },
+  sobrenome: {
+    type: String,
+    required: true
+  },
+  telefone:{
+    type: Number,
+    required: true
+  },
+  sexo:{
+    type: String,
+    required: true,
+    validate:{
+      validator: function(sexo){
+        return validator.isIn(sexo, ['M', 'F', 'O', 'N'])
+      },
+      message: '{VALUE} não é um valor de sexo válido.'
+    },
+    maxlength: 1,
+    minlength: 1
   },
   tokens: [{
     access: {
@@ -30,14 +56,18 @@ var UserSchema = new mongoose.Schema({
       type: String,
       required: true
     }
-  }]
+  }],
+  isAdmin: {
+    type: Boolean,
+    required: true
+  }
 });
 
 UserSchema.methods.toJSON = function () {
   var user = this;
   var userObject = user.toObject();
 
-  return _.pick(userObject, ['_id', 'email']);
+  return _.pick(userObject, ['_id', 'email', 'nome', 'sobrenome', 'telefone', 'sexo']);
 };
 
 UserSchema.methods.removeToken = function(token) {
@@ -53,7 +83,7 @@ UserSchema.methods.removeToken = function(token) {
 UserSchema.methods.generateAuthToken = function () {
   var user = this;
   var access = 'auth';
-  var token = jwt.sign({ _id: user._id.toHexString(), access }, 'menesxd').toString();
+  var token = jwt.sign({ _id: user._id.toHexString(), access }, '$lh71E0%A7&SA9-|NkEYXxYZOW06Kb@^63!p^D1M&*7!pTXTa7').toString();
 
   user.tokens = user.tokens.concat([{ access, token }]);
 
@@ -104,7 +134,7 @@ UserSchema.statics.findByToken = function (token) {
   var decoded;
 
   try {
-    decoded = jwt.verify(token, 'menesxd');
+    decoded = jwt.verify(token, '$lh71E0%A7&SA9-|NkEYXxYZOW06Kb@^63!p^D1M&*7!pTXTa7');
   }
   catch (e) {
     return Promise.reject();

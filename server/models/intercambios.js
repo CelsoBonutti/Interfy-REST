@@ -37,7 +37,7 @@ var IntercambioSchema = new mongoose.Schema({
             required: true
         },
         qntSemanas: {
-            Type: Number,
+            type: Number,
             required: true
         },
         dtInicio: {
@@ -81,8 +81,6 @@ IntercambioSchema.statics.findByUserIdAndPopulate = function (_userId) {
         select: 'nome'
     })
 }
-
-
 
 var Intercambio = mongoose.model('Intercambio', IntercambioSchema);
 
