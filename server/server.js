@@ -24,6 +24,7 @@ var { Instituicao } = require('./models/ies');
 var { Curso } = require('./models/curso');
 var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
+var { Paises } = require('./models/pais');
 
 //Middleware
 var { authenticate } = require('./middleware/authenticate');
@@ -70,6 +71,17 @@ app.delete('/users/me/token', authenticate, (req, res) => {
   })
 })
 
+app.post('/info/me', authenticate, (req, res) =>{
+  var body = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
+  var informacoes = new Informacoes(body);
+
+  informacoes.save().then((informacoes) =>{
+    res.status(200).send(informacoes)
+  }, () =>{
+    res.status(400).send(informacoes)
+  })
+})
+
 app.get('/info/me', authenticate, (req, res) => {
   Informacoes.findByUserId(req.user._id).then((informacoes) => {
     res.status(200).send(informacoes);
@@ -78,8 +90,8 @@ app.get('/info/me', authenticate, (req, res) => {
   })
 })
 
-app.patch('/info/:id', authenticate, (req, res) => {
-  var id = req.params.id;
+app.patch('/info/me', authenticate, (req, res) => {
+  var id = req.user._id;
   var novasInformacoes = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
 
   if (!ObjectID.isValid(id)) {
@@ -92,27 +104,75 @@ app.patch('/info/:id', authenticate, (req, res) => {
     }
     res.status(200).send({ informacoes });
   }).catch((e) => {
-    res.status(400).send();
+    res.status(400).send(e);
   })
 })
 
 
 app.get('/intercambios', authenticate, (req, res) =>{
-  
+  var id = req.user._id
+
+  if(!ObjectID.isValid(id)){
+    return res.status(404).send();
+  }
+
+  Intercambios.findByUserIdAndPopulate(id).then((intercambios) =>{
+    if(!intercambios){
+      return res.status(404).send();
+    }
+    res.status(200).send({ intercambios });
+  }).catch((e) =>{
+    res.status(400).send(e);
+  })
 })
 
-// app.get('/escolas', (req, res) => {
-//   var listaEscolas = Instituicao.findByFilter(filter).then(())
-// })
+app.post('/intercambios', authenticate, (req, res) =>{
+  var body = _.pick(req.body, ['adicionais', 'curso'])
+  body._userId = req.user._id;
+  var novoIntercambio = new Intercambios(novoIntercambio);
 
-app.post('/escolas/register', authenticate, (req, res) => {
-  if (!req.user.admin){
-    return res.status(401).send();
-  }
-  else{
-    
-  }
+  novoIntercambio.save().then(() =>{
+    res.status(200).send();
+  }).catch((e) =>{
+    res.status(400).send();
+  })
 })
+
+app.get('/escolas', (req, res) => {
+  var listaEscolas = Instituicao.findByFilter(filter).then((escola) =>{
+    res.status(200).send();
+  },() =>{
+    res.status(400).send();
+  })
+})
+
+app.post('/escolas/register', authenticateAdmin, (req, res) => {
+  var turnos = _.pick(req.body, ['turnos']);
+  var cargas = _.pick(req.body, ['cargas']);
+  var cursos = _.pick(req.body, ['cursos']);
+  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'cursos', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
+})
+
+app.get('/pais', (req, res) =>{
+  Paises.findBySigla(req.body.pais).then((pais) =>{
+    res.status(200).send(pais);
+  }, () =>{
+    res.status(404).send();
+  })
+})
+
+app.post('/pais/register', authenticateAdmin, (req, res) =>{
+  var body = _.pick(req.body, ['nome', 'sigla', 'capital', 'continente', 'linguas', 'moeda', 'descricao', 'vistos', 'clima', 'sugestao']);
+  var pais = new Paises(body);
+
+  pais.save().then((pais) =>{
+    res.status(200).send(pais);
+  }, ()=>{
+    res.status(400).send();
+  })
+})
+
+
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);

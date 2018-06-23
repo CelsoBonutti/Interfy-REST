@@ -3,18 +3,6 @@ const validator = require('validator');
 const _ = require('lodash');
 
 var InformacoesSchema = new mongoose.Schema({
-    nome: {
-        type: String,
-        required: true
-    },
-    sobrenome: {
-        type: String,
-        required: true
-    },
-    telefone: {
-        type: Number,
-        required: true
-    },
     dataNascimento: {
         type: Date,
         required: true

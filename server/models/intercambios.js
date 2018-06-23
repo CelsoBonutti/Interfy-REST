@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const jwt = require('jsonwebtoken');
 const _ = require('lodash');
-const Curso = require('./curso');
 
 var IntercambioSchema = new mongoose.Schema({
     adicionais: {
@@ -50,19 +48,22 @@ var IntercambioSchema = new mongoose.Schema({
         },
         instituicao: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Instituicao'
+            ref: 'Instituicao',
+            required: true
         },
         valor: {
             type: Number,
             validate: {
-                validator: validator.isCurrency
-            }
-        },
-        _userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+                validator: validator.isCurrency,
+                message: '{VALUE} não é um valor válido.'
+            },
             required: true
         }
+    },
+    _userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 })
 
@@ -71,6 +72,7 @@ IntercambioSchema.methods.calcularValor = function () {
     this.adicionais.foreach(adicional => {
         valor += adicionais.valor;
     });
+    return valor;
 }
 
 IntercambioSchema.statics.findByUserIdAndPopulate = function (_userId) {

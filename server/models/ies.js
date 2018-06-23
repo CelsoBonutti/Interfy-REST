@@ -57,7 +57,8 @@ var InstituicaoSchema = new mongoose.Schema({
         texto: {
             type: String,
             required: true
-        }
+        },
+        required: false
     },
     infraestrutura: [{
         type: String,

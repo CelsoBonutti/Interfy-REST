@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const currencyConvert = require('currency-convert');
 
@@ -8,6 +7,12 @@ var PaisSchema = new mongoose.Schema({
     nome: {
         type: String,
         required: true
+    },
+    sigla: {
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 2
     },
     capital: {
         type: String,
@@ -75,10 +80,15 @@ var PaisSchema = new mongoose.Schema({
     }
 })
 
-PaisSchema.methods.converteMoeda = function () {
+PaisSchema.virtual('converteMoeda').get = function () {
     currencyConvert('BRL', this.moeda).then((valor) => {
         return valor;
     }).catch((err) => {
-        console.log(err);
+        return (err);
     })
+}
+
+PaisSchema.statics.findBySigla = function (sigla){
+    var Pais = this;
+    return Pais.find({sigla});
 }
