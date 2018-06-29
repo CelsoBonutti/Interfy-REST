@@ -23,30 +23,6 @@ var UserSchema = new mongoose.Schema({
     require: true,
     minlength: 8
   },
-  nome: {
-    type: String,
-    required: true
-  },
-  sobrenome: {
-    type: String,
-    required: true
-  },
-  telefone:{
-    type: Number,
-    required: true
-  },
-  sexo:{
-    type: String,
-    required: true,
-    validate:{
-      validator: function(sexo){
-        return validator.isIn(sexo, ['M', 'F', 'O', 'N'])
-      },
-      message: '{VALUE} não é um valor de sexo válido.'
-    },
-    maxlength: 1,
-    minlength: 1
-  },
   tokens: [{
     access: {
       type: String,
@@ -63,7 +39,7 @@ UserSchema.methods.toJSON = function () {
   var user = this;
   var userObject = user.toObject();
 
-  return _.pick(userObject, ['_id', 'email', 'nome', 'sobrenome', 'telefone', 'sexo']);
+  return _.pick(userObject, ['_id', 'email']);
 };
 
 UserSchema.methods.removeToken = function(token) {
@@ -79,7 +55,7 @@ UserSchema.methods.removeToken = function(token) {
 UserSchema.methods.generateAuthToken = function () {
   var user = this;
   var access = 'auth';
-  var token = jwt.sign({ _id: user._id.toHexString(), access }, '$lh71E0%A7&SA9-|NkEYXxYZOW06Kb@^63!p^D1M&*7!pTXTa7').toString();
+  var token = jwt.sign({ _id: user._id.toHexString(), access }, '_mDGncO87k0&8PGg|KIJZkplhWStomLtWe+C5e6dTkNd7seQ9*tQ^HJXSTeb!-QG#pV#t51*RYhzUHsdA%v9wyV|gtUk$YN&iKIK4lMUooOLsDzvN^j|quHziWtRdXpo').toString();
 
   user.tokens = user.tokens.concat([{ access, token }]);
 
@@ -130,7 +106,7 @@ UserSchema.statics.findByToken = function (token) {
   var decoded;
 
   try {
-    decoded = jwt.verify(token, '$lh71E0%A7&SA9-|NkEYXxYZOW06Kb@^63!p^D1M&*7!pTXTa7');
+    decoded = jwt.verify(token, '_mDGncO87k0&8PGg|KIJZkplhWStomLtWe+C5e6dTkNd7seQ9*tQ^HJXSTeb!-QG#pV#t51*RYhzUHsdA%v9wyV|gtUk$YN&iKIK4lMUooOLsDzvN^j|quHziWtRdXpo');
   }
   catch (e) {
     return Promise.reject();

@@ -25,6 +25,8 @@ var { Curso } = require('./models/curso');
 var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
 var { Paises } = require('./models/pais');
+var { Turno } = require('./models/turno');
+var { Carga } = require('./models/cargaHoraria');
 
 //Middleware
 var { authenticate } = require('./middleware/authenticate');
@@ -139,8 +141,8 @@ app.post('/intercambios', authenticate, (req, res) =>{
 })
 
 app.get('/escolas', (req, res) => {
-  var listaEscolas = Instituicao.findByFilter(filter).then((escola) =>{
-    res.status(200).send();
+  var listaEscolas = Instituicao.findByFilter(filter).then((escolas) =>{
+    res.status(200).send(escolas);
   },() =>{
     res.status(400).send();
   })
@@ -172,6 +174,50 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
   })
 })
 
+
+
+
+//Rotas de criação da escola
+
+app.post('/turno/register', authenticateAdmin, (req, res) =>{
+  var turnos = _.pick(req.body, ['nome', 'descricao', 'duracao']);
+  
+  Turno.create(turnos).then(() =>{
+    res.status(200).send();
+  }, ()=>{
+    res.status(400).send();
+  })
+})
+
+app.post('/carga/register', authenticateAdmin, (req, res) =>{
+  var cargas = _.pick(req.body, ['descricao', 'turno']);
+
+  Carga.create(cargas).then(() =>{
+    res.status(200).send();
+  }, (e)=>{
+    res.status(400).send(e);
+  })
+})
+
+app.post('/carga/adicionarTurno', authenticateAdmin, (req, res) =>{
+  // var 
+})
+
+app.post('/curso/register', authenticateAdmin, (req, res) =>{
+  var cursos = _.pick(req.body, ['titulo', 'descricao', 'cargaHoraria']);
+
+  Curso.create(cursos).then(() =>{
+    res.status(200).send();
+  }, (e)=>{
+    res.status(400).send();
+  })
+})
+
+app.post('/curso/adicionarCarga/:id', authenticateAdmin, (req, res) =>{
+  var body = _.pick(req.body, ['']);
+
+
+})
 
 
 app.listen(port, () => {

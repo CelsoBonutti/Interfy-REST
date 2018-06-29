@@ -15,6 +15,22 @@ var CargaHorariaSchema = new mongoose.Schema({
     }]
 })
 
+CargaHorariaSchema.methods.adicionarTurnos = function(turnos){
+    var cargaHoraria = this;
+    _.concat(cargaHoraria.turno, turnos);
+    return cargaHoraria.save().then(() =>{
+        return 
+    })
+
+    return user.save().then(() => {
+        return token;
+      });
+}
+
+CargaHorariaSchema.methods.removerTurnos = function(turnos){
+    
+}
+
 var CargaHoraria = mongoose.model('CargaHoraria', CargaHorariaSchema);
 
 module.exports = { CargaHoraria };

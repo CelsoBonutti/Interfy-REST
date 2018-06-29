@@ -71,11 +71,16 @@ var InstituicaoSchema = new mongoose.Schema({
 })
 
 InstituicaoSchema.statics.findAndFilter = function (filter) {
-    
+    filtroPais = filter.Pais;
+    filtroCidade = filter.cidade;
+    filtroCurso = filter.cursos;
+    filtro
+
     return this.find({
         $cond: {
             if: { $gte: ["$size: $$filter.cidades", 0] },
-            then: {cidade: {$in: [filter.cidades]}},
+            then: {cidade: {$in: [filter.cidades]},
+                   pais: filtroPais},
             else: {}
         }
     }).then().populate({
@@ -107,6 +112,12 @@ InstituicaoSchema.statics.findAndFilter = function (filter) {
             }
         }
     })
+}
+
+InstituicaoSchema.statics.findAndFilter = function(filter){
+    Instituicao = this;
+
+    return Instituicao.find({})
 }
 
 var Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
