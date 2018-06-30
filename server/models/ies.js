@@ -3,7 +3,7 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const { Curso } = require('./curso');
-
+//Instituicao:[Curso[Carga[Turno]]]
 var InstituicaoSchema = new mongoose.Schema({
     nome: {
         type: String,
@@ -24,9 +24,51 @@ var InstituicaoSchema = new mongoose.Schema({
         required: true
     },
     cursos: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Curso',
-        required: true
+        titulo: {
+            type: String,
+            required: true,
+            minlength: 5
+        },
+        descricao: {
+            type: String,
+            required: true
+        },
+        cargaHoraria: [{
+            descricao: {
+                type: String,
+                required: true
+            },
+            turno: [{
+                nome: {
+                    type: String,
+                    required: true
+                },
+                descricao: {
+                    type: String,
+                    required: true
+                },
+                duracao: [{
+                    numeroSemanas: {
+                        type: Number,
+                        required: true
+                    },
+                    valor: {
+                        type: String,
+                        required: true,
+                        validate:{
+                            validator: function(valor){
+                                return validator.isCurrency(valor);
+                            },
+                            message: '{VALUE} não é um valor válido'
+                        }
+                    },
+                    datas: [{
+                        type: Date,
+                        required: true,
+                    }]
+                }]
+            }]
+        }]
     }],
     fotos: {
         type: [String],
@@ -71,54 +113,32 @@ var InstituicaoSchema = new mongoose.Schema({
 })
 
 InstituicaoSchema.statics.findAndFilter = function (filter) {
-    // filtroPais = filter.Pais;
-    // filtroCidade = filter.cidade;
-    // filtroCurso = filter.cursos;
-    // filtro
+    var Instituicao = this;
 
-    return this.find({
-        $cond: {
-            if: { $gte: ["$size: $$filter.cidades", 0] },
-            then: {cidade: {$in: [filter.cidades]},
-                   pais: filtroPais},
-            else: {}
-        }
-    }).then().populate({
-        path: 'cursos',
-        populate: {
-            path: 'cargaHoraria',
-            populate: {
-                path: 'turno',
-                model: 'Turno',
-                match: {
-                    $cond: {
-                        if: { $gte: ["$size: $$filter.descricaoTurno", 0] },
-                        then: {descricao: {$in: [filter.descricaoTurno]}},
-                        else: {}}
-                }
-            },
-            match: {
-                $cond: {
-                    if: { $gte: ["$size: $$filter.descricaoCarga", 0] },
-                    then: {descricao: {$in: [filter.descricaoCarga]}},
-                    else: {}}
-            }
-        },
-        match: {
-            $cond: {
-                if: {$eq: ["$$filter.tituloCurso", null]},
-                then: {},
-                else: {titulo: filter.titulo}
-            }
-        }
-    })
+    instituicao = Instituicao.find({pais: filter.pais});
+    if(filter.turnos){
+       var turno = _filter(instituicao,{'cursos.cargas.turno.nome':filter.nome})
+       console.log({turno});     
+    }  
+    if(filter.cargas){
+        var cargas = _filter(cargas,{'cursos.cargas.nome':filter.nome})
+        console.log({cargas}); 
+    }
+    if(filter.cursos){
+        var cursos = _filter(cursos,{'cursos.nome':filter.nome})
+        console.log({cursos}); 
+    }
+    if(filter.cidade){
+        var cidade = _filter(cidade,{'Instituicao.nome':filter.nome})
+        console.log({cidade}); 
+    }
 }
 
-InstituicaoSchema.statics.findAndFilter = function(filter){
-    Instituicao = this;
+// InstituicaoSchema.statics.findAndFilter = function(filter){
+//     Instituicao = this;
 
-    return Instituicao.find({})
-}
+//     return Instituicao.find({})
+// }
 
 var Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
 

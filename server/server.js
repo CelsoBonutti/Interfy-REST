@@ -40,6 +40,13 @@ var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 var app = express();
 app.use(bodyParser.json());
 
+//Setando CORS
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 //Rotas dos usuários
 
 //Registro de usuários
@@ -273,7 +280,6 @@ app.post('/carga/register', (req, res) =>{
   }, (e)=>{
     res.status(400).send(e);
   })
-
 })
 
 //Adicionar turno à carga

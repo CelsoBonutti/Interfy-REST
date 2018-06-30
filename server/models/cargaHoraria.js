@@ -28,7 +28,7 @@ CargaHorariaSchema.methods.adicionarTurnos = function(turnos){
 }
 
 CargaHorariaSchema.pre('validate', function(next){
-    console.log(this.populate());
+    console.log(this);
     next();
 })
 
