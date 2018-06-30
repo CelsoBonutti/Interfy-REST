@@ -54,7 +54,7 @@ var PaisSchema = new mongoose.Schema({
             max: 5
         }
     }],
-    clima: {
+    clima: [{
             nome: {
                 type: String,
                 required: true
@@ -81,7 +81,7 @@ var PaisSchema = new mongoose.Schema({
                     required: true
                 }
         }
-    },
+    }],
     sugestao: {
         type: String,
         required: true
