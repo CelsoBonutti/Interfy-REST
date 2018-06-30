@@ -1,14 +1,14 @@
-var { User } = require('./../models/user');
+var { Admin } = require('./../models/userAdmin');
 
-var authenticate = (req, res, next) => {
+var authenticateAdmin = (req, res, next) => {
   var token = req.header('x-auth');
 
-  User.findByToken(token).then((user) => {
-    if (!user || (user.isAdmin != true)) {
+  Admin.findByToken(token).then((admin) => {
+    if (!admin) {
       return Promise.reject();
     }
 
-    req.user = user;
+    req.admin = admin;
     req.token = token;
     next();
   }).catch((e) => {
@@ -16,4 +16,4 @@ var authenticate = (req, res, next) => {
   })
 };
 
-module.exports = { authenticate };
+module.exports = { authenticateAdmin };

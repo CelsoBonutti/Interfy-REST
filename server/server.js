@@ -1,3 +1,4 @@
+//Configuração das variáveis de ambiente
 var env = process.env.NODE_ENV || 'development';
 console.log('env *****', env);
 
@@ -9,6 +10,9 @@ if (env === 'development') {
   process.env.MONGO_STR = 'mongodb://localhost:27017/test'
 }
 
+var { mongoose } = require('./db/mongoose');
+
+
 //Bibliotecas
 const _ = require('lodash');
 const express = require('express');
@@ -18,7 +22,6 @@ const jwt = require('jsonwebtoken');
 var { ObjectID } = require('mongodb');
 
 //Models
-var { mongoose } = require('./db/mongoose');
 var { User } = require('./models/user');
 var { Instituicao } = require('./models/ies');
 var { Curso } = require('./models/curso');
@@ -30,11 +33,15 @@ var { Carga } = require('./models/cargaHoraria');
 
 //Middleware
 var { authenticate } = require('./middleware/authenticate');
+var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 
+//Configuração dos frameworks
 var app = express();
-
 app.use(bodyParser.json());
 
+//Rotas dos usuários
+
+//Registro de usuários
 app.post('/users/register', (req, res) => {
   var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'sexo']);
   body.isAdmin = false;
@@ -49,10 +56,7 @@ app.post('/users/register', (req, res) => {
   })
 })
 
-app.get('/users/me', authenticate, (req, res) => {
-  res.send(req.user);
-})
-
+//Rota de login
 app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
 
@@ -65,6 +69,7 @@ app.post('/users/login', (req, res) => {
   })
 })
 
+//Rota de logout
 app.delete('/users/me/token', authenticate, (req, res) => {
   req.user.removeToken(req.token).then(() => {
     res.status(200).send();
@@ -73,6 +78,14 @@ app.delete('/users/me/token', authenticate, (req, res) => {
   })
 })
 
+//Retornar informação do usuário
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+})
+
+//Rotas de informações pessoais de usuários
+
+//Registra informações pessoais do usuário
 app.post('/info/me', authenticate, (req, res) =>{
   var body = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
   var informacoes = new Informacoes(body);
@@ -84,6 +97,7 @@ app.post('/info/me', authenticate, (req, res) =>{
   })
 })
 
+//Retorna informações pessoais do usuário
 app.get('/info/me', authenticate, (req, res) => {
   Informacoes.findByUserId(req.user._id).then((informacoes) => {
     res.status(200).send(informacoes);
@@ -92,6 +106,7 @@ app.get('/info/me', authenticate, (req, res) => {
   })
 })
 
+//Atualiza registro de informações pessoais do usuário
 app.patch('/info/me', authenticate, (req, res) => {
   var id = req.user._id;
   var novasInformacoes = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
@@ -110,7 +125,9 @@ app.patch('/info/me', authenticate, (req, res) => {
   })
 })
 
+//Rotas de intercâmbio
 
+//Retornar intercâmbios do usuário
 app.get('/intercambios', authenticate, (req, res) =>{
   var id = req.user._id
 
@@ -140,20 +157,8 @@ app.post('/intercambios', authenticate, (req, res) =>{
   })
 })
 
-app.get('/escolas', (req, res) => {
-  var listaEscolas = Instituicao.findByFilter(filter).then((escolas) =>{
-    res.status(200).send(escolas);
-  },() =>{
-    res.status(400).send();
-  })
-})
 
-app.post('/escolas/register', authenticateAdmin, (req, res) => {
-  var turnos = _.pick(req.body, ['turnos']);
-  var cargas = _.pick(req.body, ['cargas']);
-  var cursos = _.pick(req.body, ['cursos']);
-  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'cursos', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
-})
+
 
 app.get('/pais', (req, res) =>{
   Paises.findBySigla(req.body.pais).then((pais) =>{
@@ -166,7 +171,7 @@ app.get('/pais', (req, res) =>{
 app.post('/pais/register', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['nome', 'sigla', 'capital', 'continente', 'linguas', 'moeda', 'descricao', 'vistos', 'clima', 'sugestao']);
   var pais = new Paises(body);
-
+  
   pais.save().then((pais) =>{
     res.status(200).send(pais);
   }, ()=>{
@@ -174,11 +179,33 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
   })
 })
 
+//Rotas de escola
 
+//Rotas de retorno de informações das escolas
+app.get('/escolas', (req, res) => {
+  var listaEscolas = Instituicao.findByFilter(filter).then((escolas) =>{
+    res.status(200).send(escolas);
+  },() =>{
+    res.status(400).send();
+  })
+})
 
+app.delete('/escolas', (req, res) =>{
+  
+})
 
 //Rotas de criação da escola
 
+app.post('/escolas/register', authenticateAdmin, (req, res) => {
+  var turnos = _.pick(req.body, ['turnos']);
+  var cargas = _.pick(req.body, ['cargas']);
+  var cursos = _.pick(req.body, ['cursos']);
+  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'cursos', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
+})
+
+//Rotas de turno
+
+//Registro de turnos
 app.post('/turno/register', authenticateAdmin, (req, res) =>{
   var turnos = _.pick(req.body, ['nome', 'descricao', 'duracao']);
   
@@ -189,6 +216,8 @@ app.post('/turno/register', authenticateAdmin, (req, res) =>{
   })
 })
 
+
+//Registro de cargas
 app.post('/carga/register', authenticateAdmin, (req, res) =>{
   var cargas = _.pick(req.body, ['descricao', 'turno']);
 
@@ -199,10 +228,12 @@ app.post('/carga/register', authenticateAdmin, (req, res) =>{
   })
 })
 
-app.post('/carga/adicionarTurno', authenticateAdmin, (req, res) =>{
-  // var 
+//Adicionar turno à carga
+app.post('/carga/adicionarTurno/:id', authenticateAdmin, (req, res) =>{
+  
 })
 
+//Registro de curso
 app.post('/curso/register', authenticateAdmin, (req, res) =>{
   var cursos = _.pick(req.body, ['titulo', 'descricao', 'cargaHoraria']);
 
@@ -213,10 +244,10 @@ app.post('/curso/register', authenticateAdmin, (req, res) =>{
   })
 })
 
+//Adicionar carga ao curso
 app.post('/curso/adicionarCarga/:id', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['']);
-
-
+  var id = req.params.id;
 })
 
 

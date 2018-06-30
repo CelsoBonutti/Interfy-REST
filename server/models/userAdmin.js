@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
-var UserSchema = new mongoose.Schema({
+var AdminSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -35,42 +35,42 @@ var UserSchema = new mongoose.Schema({
   }]
 });
 
-UserSchema.methods.toJSON = function () {
-  var user = this;
-  var userObject = user.toObject();
+AdminSchema.methods.toJSON = function () {
+  var admin = this;
+  var adminObject = admin.toObject();
 
-  return _.pick(userObject, ['_id', 'email']);
+  return _.pick(adminObject, ['_id', 'email']);
 };
 
-UserSchema.methods.removeToken = function(token) {
-  var user = this;
+AdminSchema.methods.removeToken = function(token) {
+  var admin = this;
 
-  return user.update({
+  return admin.update({
     $pull:{
       tokens: {token}
     }
   })
 }
 
-UserSchema.methods.generateAuthToken = function () {
-  var user = this;
+AdminSchema.methods.generateAuthToken = function () {
+  var admin = this;
   var access = 'auth';
-  var token = jwt.sign({ _id: user._id.toHexString(), access }, '_mDGncO87k0&8PGg|KIJZkplhWStomLtWe+C5e6dTkNd7seQ9*tQ^HJXSTeb!-QG#pV#t51*RYhzUHsdA%v9wyV|gtUk$YN&iKIK4lMUooOLsDzvN^j|quHziWtRdXpo').toString();
+  var token = jwt.sign({ _id: admin._id.toHexString(), access }, '_mDGncO87k0&8PGg|KIJZkplhWStomLtWe+C5e6dTkNd7seQ9*tQ^HJXSTeb!-QG#pV#t51*RYhzUHsdA%v9wyV|gtUk$YN&iKIK4lMUooOLsDzvN^j|quHziWtRdXpo').toString();
 
-  user.tokens = user.tokens.concat([{ access, token }]);
+  admin.tokens = admin.tokens.concat([{ access, token }]);
 
-  return user.save().then(() => {
+  return admin.save().then(() => {
     return token;
   });
 };
 
-UserSchema.pre('save', function (next) {
-  var user = this;
+AdminSchema.pre('save', function (next) {
+  var admin = this;
 
-  if (user.isModified('password')) {
+  if (admin.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(user.password, salt, (err, hash) => {
-        user.password = hash;
+      bcrypt.hash(admin.password, salt, (err, hash) => {
+        admin.password = hash;
         next();
       })
     })
@@ -80,29 +80,29 @@ UserSchema.pre('save', function (next) {
   }
 })
 
-UserSchema.statics.findByCredentials = function (email, password) {
-  var User = this;
+AdminSchema.statics.findByCredentials = function (email, password) {
+  var Admin = this;
 
-  return User.findOne({ email }).then((user) => {
-    if (!user) {
+  return Admin.findOne({ email }).then((admin) => {
+    if (!admin) {
       return Promise.reject();
     }
 
     return new Promise((resolve, reject) => {
-      bcrypt.compare(password, user.password, (err, res) => {
+      bcrypt.compare(password, admin.password, (err, res) => {
         if (err) {
           reject(err);
         }
         else {
-          resolve(user);
+          resolve(admin);
         }
       })
     })
   })
 };
 
-UserSchema.statics.findByToken = function (token) {
-  var User = this;
+AdminSchema.statics.findByToken = function (token) {
+  var Admin = this;
   var decoded;
 
   try {
@@ -112,13 +112,13 @@ UserSchema.statics.findByToken = function (token) {
     return Promise.reject();
   }
 
-  return User.findOne({
+  return Admin.findOne({
     _id: decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
   })
 }
 
-var User = mongoose.model('User', UserSchema);
+var Admin = mongoose.model('Admin', AdminSchema);
 
-module.exports = { User }
+module.exports = { Admin }

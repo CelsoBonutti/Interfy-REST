@@ -8,10 +8,10 @@ var IntercambioSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        icone: {
-            type: String,
-            required: true
-        },
+        // icone: {
+        //     type: String,
+        //     required: true
+        // },
         valor: {
             type: Number,
             required: true,
@@ -67,7 +67,7 @@ var IntercambioSchema = new mongoose.Schema({
     }
 })
 
-IntercambioSchema.methods.calcularValor = function () {
+IntercambioSchema.virtual.valorTotal = function () {
     var valor = this.curso.valor;
     this.adicionais.foreach(adicional => {
         valor += adicionais.valor;

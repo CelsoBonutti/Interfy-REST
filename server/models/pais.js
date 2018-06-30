@@ -22,36 +22,39 @@ var PaisSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    linguas: {
-        type: [String],
-        required: true
-    },
-    moeda: {
+    linguas: [{
         type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 3
+        required: true
+    }],
+    moeda: {
+        codigo: {
+            type: String,
+            required: true,
+            minlength: 3,
+            maxlength: 3
+        },
+        nome: {
+            type: String,
+            required: true
+        }
     },
     descricao: {
         type: String,
         required: true,
         maxlength: 100
     },
-    vistos: {
-        type: [{
-            nome: {
-                type: String,
-                required: true
-            },
-            dificuldade: {
-                type: Number,
-                min: 0,
-                max: 5
-            }
-        }]
-    },
-    clima: [{
-        estacoes: [{
+    vistos: [{
+        nome: {
+            type: String,
+            required: true
+        },
+        dificuldade: {
+            type: Number,
+            min: 0,
+            max: 5
+        }
+    }],
+    clima: {
             nome: {
                 type: String,
                 required: true
@@ -69,11 +72,16 @@ var PaisSchema = new mongoose.Schema({
                 required: true
             },
             temperatura: {
-                type: [Number],
-                required: true
-            }
-        }]
-    }],
+                minima:{
+                    type: Number,
+                    required: true
+                },
+                maxima:{
+                    type: Number,
+                    required: true
+                }
+        }
+    },
     sugestao: {
         type: String,
         required: true
@@ -88,7 +96,7 @@ PaisSchema.virtual('converteMoeda').get = function () {
     })
 }
 
-PaisSchema.statics.findBySigla = function (sigla){
+PaisSchema.statics.findBySigla = function (sigla) {
     var Pais = this;
-    return Pais.find({sigla});
+    return Pais.find({ sigla });
 }

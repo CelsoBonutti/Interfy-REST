@@ -56,7 +56,12 @@ var UserSchema = new mongoose.Schema({
       type: String,
       required: true
     }
-  }]
+  }],
+  active: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
 });
 
 UserSchema.methods.toJSON = function () {
