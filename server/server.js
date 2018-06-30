@@ -30,6 +30,7 @@ var { Intercambios } = require('./models/intercambios');
 var { Paises } = require('./models/pais');
 var { Turno } = require('./models/turno');
 var { Carga } = require('./models/cargaHoraria');
+var { Pais } = require('./models/pais');
 
 //Middleware
 var { authenticate } = require('./middleware/authenticate');
@@ -44,7 +45,6 @@ app.use(bodyParser.json());
 //Registro de usuários
 app.post('/users/register', (req, res) => {
   var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'sexo']);
-  body.isAdmin = false;
   var user = new User(body);
 
   user.save().then(() => {
@@ -53,6 +53,31 @@ app.post('/users/register', (req, res) => {
     res.header('x-auth', token).send(user);
   }).catch((e) => {
     res.status(400).send(e);
+  })
+})
+
+app.patch('/users/me', authenticate, (req, res) =>{
+  var id = req.user.id;
+  var novasInformacoes = _.pick(req.body, ['password', 'nome', 'sobrenome', 'telefone', 'sexo']);
+  
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send();
+  }
+  
+  User.findByIdAndUpdate(id, {$set: novasInformacoes}, {new: true}).then((user) =>{
+    res.status(200).send(user);
+  },()=>{
+    res.status(400).send();
+  })
+})
+
+app.delete('/users/me', authenticate, (req,res) =>{
+  var id = req.user.id;
+  
+  User.findByIdAndRemove(id).then((user) =>{
+    res.status(200).send(user);
+  },() =>{
+    res.status(400).send();
   })
 })
 
@@ -145,6 +170,7 @@ app.get('/intercambios', authenticate, (req, res) =>{
   })
 })
 
+//Registro de intercâmbios para usuário
 app.post('/intercambios', authenticate, (req, res) =>{
   var body = _.pick(req.body, ['adicionais', 'curso'])
   body._userId = req.user._id;
@@ -158,7 +184,9 @@ app.post('/intercambios', authenticate, (req, res) =>{
 })
 
 
+//Rotas de países
 
+//Retornar informações do país
 
 app.get('/pais', (req, res) =>{
   Paises.findBySigla(req.body.pais).then((pais) =>{
@@ -168,6 +196,7 @@ app.get('/pais', (req, res) =>{
   })
 })
 
+//Registrar informações de países
 app.post('/pais/register', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['nome', 'sigla', 'capital', 'continente', 'linguas', 'moeda', 'descricao', 'vistos', 'clima', 'sugestao']);
   var pais = new Paises(body);
@@ -191,7 +220,7 @@ app.get('/escolas', (req, res) => {
 })
 
 app.delete('/escolas', (req, res) =>{
-  
+
 })
 
 //Rotas de criação da escola
@@ -216,6 +245,14 @@ app.post('/turno/register', authenticateAdmin, (req, res) =>{
   })
 })
 
+app.delete('/turno/:id', authenticateAdmin, (req, res) =>{
+  var id = req.param.id;
+
+})
+
+app.get('/turno')
+
+//Rotas de cargas
 
 //Registro de cargas
 app.post('/carga/register', authenticateAdmin, (req, res) =>{
@@ -248,6 +285,10 @@ app.post('/curso/register', authenticateAdmin, (req, res) =>{
 app.post('/curso/adicionarCarga/:id', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['']);
   var id = req.params.id;
+})
+
+app.post('/admin/register', (req, res) =>{
+  var body = _.pick(req.body, []);
 })
 
 

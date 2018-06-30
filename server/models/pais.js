@@ -89,14 +89,13 @@ var PaisSchema = new mongoose.Schema({
 })
 
 PaisSchema.virtual('converteMoeda').get = function () {
-    currencyConvert('BRL', this.moeda).then((valor) => {
+    currencyConvert('BRL', this.moeda.codigo).then((valor) => {
         return valor;
     }).catch((err) => {
         return (err);
     })
 }
 
-PaisSchema.statics.findBySigla = function (sigla) {
-    var Pais = this;
-    return Pais.find({ sigla });
-}
+var Pais = mongoose.model('Pais', PaisSchema);
+
+module.exports = { Pais };

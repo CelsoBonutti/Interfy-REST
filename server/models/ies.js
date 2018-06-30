@@ -71,10 +71,10 @@ var InstituicaoSchema = new mongoose.Schema({
 })
 
 InstituicaoSchema.statics.findAndFilter = function (filter) {
-    filtroPais = filter.Pais;
-    filtroCidade = filter.cidade;
-    filtroCurso = filter.cursos;
-    filtro
+    // filtroPais = filter.Pais;
+    // filtroCidade = filter.cidade;
+    // filtroCurso = filter.cursos;
+    // filtro
 
     return this.find({
         $cond: {
