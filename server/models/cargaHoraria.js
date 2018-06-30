@@ -27,6 +27,11 @@ CargaHorariaSchema.methods.adicionarTurnos = function(turnos){
       });
 }
 
+CargaHorariaSchema.pre('validate', function(next){
+    console.log(this.populate());
+    next();
+})
+
 CargaHorariaSchema.methods.removerTurnos = function(turnos){
     
 }

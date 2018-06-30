@@ -17,11 +17,13 @@ var TurnoSchema = new mongoose.Schema({
             required: true
         },
         valor: {
-            type: Number,
+            type: String,
             required: true,
-            validate: {
-                validator: validator.isCurrency,
-                message: '{VALUE} não é um preço válido.'
+            validate:{
+                validator: function(valor){
+                    return validator.isCurrency(valor);
+                },
+                message: '{VALUE} não é um valor válido'
             }
         },
         datas: [{

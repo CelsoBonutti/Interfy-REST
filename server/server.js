@@ -29,7 +29,7 @@ var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
 var { Paises } = require('./models/pais');
 var { Turno } = require('./models/turno');
-var { Carga } = require('./models/cargaHoraria');
+var { CargaHoraria } = require('./models/cargaHoraria');
 var { Pais } = require('./models/pais');
 
 //Middleware
@@ -56,20 +56,28 @@ app.post('/users/register', (req, res) => {
   })
 })
 
+//Atualização de informações do usuário
 app.patch('/users/me', authenticate, (req, res) =>{
   var id = req.user.id;
-  var novasInformacoes = _.pick(req.body, ['password', 'nome', 'sobrenome', 'telefone', 'sexo']);
+  var newPassword = _.pick(req.body, ['password']).password;
+  var novasInformacoes = _.pick(req.body, ['nome', 'sobrenome', 'telefone', 'sexo']);
   
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
   }
   
   User.findByIdAndUpdate(id, {$set: novasInformacoes}, {new: true}).then((user) =>{
+    user.password = newPassword;
+    return user.save().then((user) =>{
+      res.status(200).send(user);
+    },(e)=>{
+      res.status(400).send(e);
+    })
     res.status(200).send(user);
-  },()=>{
-    res.status(400).send();
   })
 })
+
+//Exclusão de usuário
 
 app.delete('/users/me', authenticate, (req,res) =>{
   var id = req.user.id;
@@ -117,8 +125,8 @@ app.post('/info/me', authenticate, (req, res) =>{
 
   informacoes.save().then((informacoes) =>{
     res.status(200).send(informacoes)
-  }, () =>{
-    res.status(400).send(informacoes)
+  }, (e) =>{
+    res.status(400).send(e)
   })
 })
 
@@ -126,8 +134,8 @@ app.post('/info/me', authenticate, (req, res) =>{
 app.get('/info/me', authenticate, (req, res) => {
   Informacoes.findByUserId(req.user._id).then((informacoes) => {
     res.status(200).send(informacoes);
-  }, () => {
-    res.status(400).send();
+  }, (e) => {
+    res.status(400).send(e);
   })
 })
 
@@ -140,7 +148,7 @@ app.patch('/info/me', authenticate, (req, res) => {
     return res.status(404).send();
   }
 
-  Informacoes.findByIdAndUpdate(id, { $set: novasInformacoes }).then((informacoes) => {
+  Informacoes.findByIdAndUpdate(id, { $set: novasInformacoes }, {new: true}).then((informacoes) => {
     if (!informacoes) {
       return res.status(404).send();
     }
@@ -235,13 +243,14 @@ app.post('/escolas/register', authenticateAdmin, (req, res) => {
 //Rotas de turno
 
 //Registro de turnos
-app.post('/turno/register', authenticateAdmin, (req, res) =>{
-  var turnos = _.pick(req.body, ['nome', 'descricao', 'duracao']);
+app.post('/turno/register', (req, res) =>{
+  var turnos = _.pick(req.body, ['turnos']).turnos;
   
-  Turno.create(turnos).then(() =>{
-    res.status(200).send();
-  }, ()=>{
-    res.status(400).send();
+  Turno.create(turnos).then((turnos) =>{
+    var turnosId = _.map(turnos, '_id');
+    res.status(200).send(turnosId);
+  }, (e)=>{
+    res.status(400).send(e);
   })
 })
 
@@ -255,14 +264,16 @@ app.get('/turno')
 //Rotas de cargas
 
 //Registro de cargas
-app.post('/carga/register', authenticateAdmin, (req, res) =>{
-  var cargas = _.pick(req.body, ['descricao', 'turno']);
-
-  Carga.create(cargas).then(() =>{
-    res.status(200).send();
+app.post('/carga/register', (req, res) =>{
+  var cargas = _.pick(req.body, ['cargas']).cargas;
+  
+  CargaHoraria.create(cargas).then((cargas) =>{
+    var cargasId = _.map(cargas, '_id');
+    res.status(200).send(cargasId);
   }, (e)=>{
     res.status(400).send(e);
   })
+
 })
 
 //Adicionar turno à carga
@@ -296,4 +307,4 @@ app.listen(port, () => {
   console.log(`Started on port ${port}`);
 })
 
-module.exports = { app };
+module.exports = { app };CargaHoraria
