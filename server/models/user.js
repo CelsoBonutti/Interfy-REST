@@ -35,7 +35,7 @@ var UserSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  sexo:{
+  genero:{
     type: String,
     required: true,
     validate:{

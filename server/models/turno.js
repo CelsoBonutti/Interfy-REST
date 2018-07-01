@@ -30,7 +30,17 @@ var TurnoSchema = new mongoose.Schema({
             type: Date,
             required: true,
         }]
-    }]
+    }],
+    instituicao: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Instituicao',
+        required: true
+    },
+    intensidade: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Intensidade',
+        required: true
+    }
 })
 
 var Turno = mongoose.model('Turno', TurnoSchema);

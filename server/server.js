@@ -29,7 +29,7 @@ var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
 var { Paises } = require('./models/pais');
 var { Turno } = require('./models/turno');
-var { CargaHoraria } = require('./models/cargaHoraria');
+var { Intensidade } = require('./models/intensidade');
 var { Pais } = require('./models/pais');
 
 //Middleware
@@ -37,7 +37,7 @@ var { authenticate } = require('./middleware/authenticate');
 var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 
 //Configuração dos frameworks
-var app = express();
+var app = express();https://play.google.com/music/playlist/AMaBXyl3t-dRDwinNQWgH4MYSkSIW9NQoYZPz7ELf9eDJtTVMb7SxCr6C0rGHdTWHSAm8H_CvJz6oeVFjiycZDZ3LHBbLR_iYg%3D%3D
 app.use(bodyParser.json());
 
 //Setando CORS
@@ -87,7 +87,7 @@ app.patch('/users/me', authenticate, (req, res) =>{
 //Exclusão de usuário
 
 app.delete('/users/me', authenticate, (req,res) =>{
-  var id = req.user.id;
+  var id = req.user.id;https://play.google.com/music/playlist/AMaBXyl3t-dRDwinNQWgH4MYSkSIW9NQoYZPz7ELf9eDJtTVMb7SxCr6C0rGHdTWHSAm8H_CvJz6oeVFjiycZDZ3LHBbLR_iYg%3D%3D
   
   User.findByIdAndRemove(id).then((user) =>{
     res.status(200).send(user);
@@ -227,10 +227,11 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
 
 //Rotas de retorno de informações das escolas
 app.get('/escolas', (req, res) => {
-  var listaEscolas = Instituicao.findByFilter(filter).then((escolas) =>{
+  var filter = req.query;
+  Instituicao.findByFilter(filter).then((escolas) =>{
     res.status(200).send(escolas);
-  },() =>{
-    res.status(400).send();
+  },(e) =>{
+    res.status(400).send(e);
   })
 })
 
@@ -238,70 +239,99 @@ app.delete('/escolas', (req, res) =>{
 
 })
 
-//Rotas de criação da escola
+//Rotas de registro de escolas
 
-app.post('/escolas/register', authenticateAdmin, (req, res) => {
-  var turnos = _.pick(req.body, ['turnos']);
-  var cargas = _.pick(req.body, ['cargas']);
-  var cursos = _.pick(req.body, ['cursos']);
-  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'cursos', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
-})
-
-//Rotas de turno
-
-//Registro de turnos
-app.post('/turno/register', (req, res) =>{
-  var turnos = _.pick(req.body, ['turnos']).turnos;
-  
-  Turno.create(turnos).then((turnos) =>{
-    var turnosId = _.map(turnos, '_id');
-    res.status(200).send(turnosId);
-  }, (e)=>{
+app.post('/escolas/register', (req, res) => {
+  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
+  Instituicao.create(escola).then((escola) =>{
+    res.status(200).send(escola);
+  },(e)=>{
     res.status(400).send(e);
   })
 })
 
-app.delete('/turno/:id', authenticateAdmin, (req, res) =>{
-  var id = req.param.id;
+app.post('/cursos/register', (req, res) =>{
+  var curso = _.pick(req.body, ['cursos']).cursos;
 
-})
+  // curso.forEach(curso=>{
+  //   Instituicao.findById(curso.escola).then((escola)=>{
+  //     if(!escola){
+  //       res.status(404).send('Escola não encontrada');
+  //     }
+  //   }).catch((e)=>{
+  //     res.status(400).send(e);
+  //   })
+  // })
 
-app.get('/turno')
-
-//Rotas de cargas
-
-//Registro de cargas
-app.post('/carga/register', (req, res) =>{
-  var cargas = _.pick(req.body, ['cargas']).cargas;
-  
-  CargaHoraria.create(cargas).then((cargas) =>{
-    var cargasId = _.map(cargas, '_id');
-    res.status(200).send(cargasId);
-  }, (e)=>{
+  Curso.create(curso).then((curso) =>{
+    res.status(200).send(curso);
+  },(e)=>{
+    res.status(400).send(e);
+  }).catch((e)=>{
     res.status(400).send(e);
   })
 })
 
-//Adicionar turno à carga
-app.post('/carga/adicionarTurno/:id', authenticateAdmin, (req, res) =>{
-  
-})
-
-//Registro de curso
-app.post('/curso/register', authenticateAdmin, (req, res) =>{
-  var cursos = _.pick(req.body, ['titulo', 'descricao', 'cargaHoraria']);
-
-  Curso.create(cursos).then(() =>{
-    res.status(200).send();
-  }, (e)=>{
-    res.status(400).send();
+app.post('/intensidades/register', (req, res) =>{
+  var intensidade = _.pick(req.body, ['intensidades']).intensidades;
+  Intensidade.create(intensidade).then((intensidade) =>{
+    res.status(200).send(intensidade);
+  },(e)=>{
+    res.status(400).send(e);
   })
 })
 
-//Adicionar carga ao curso
-app.post('/curso/adicionarCarga/:id', authenticateAdmin, (req, res) =>{
-  var body = _.pick(req.body, ['']);
+app.post('/turnos/register', (req, res) =>{
+  var turno = _.pick(req.body, ['turnos']).turnos;
+  Turno.create(turno).then((turno) =>{
+    res.status(200).send(turno);
+  },(e)=>{
+    res.status(400).send(e);
+  })
+})
+
+//Rotas de exclusão de escolas
+
+app.delete('/turnos/:id', authenticateAdmin, (req, res) =>{
   var id = req.params.id;
+  Turno.findByIdAndRemove(id).then((turno) =>{
+    res.status(200).send(turno);
+  },(e)=>{
+    res.status(400).send(e);
+  })
+})
+
+app.delete('/intensidades/:id', (req,res)=>{
+  var id = req.params.id;
+  Intensidade.findById(id).then((intensidade)=>{
+    intensidade.remove().then((intensidade)=>{
+      res.status(200).send(intensidade);
+    },(e)=>{
+      res.status(400).send(e);
+    })
+  })
+})
+
+app.delete('/cursos/:id', (req, res)=>{
+  var id = req.params.id;
+  Curso.findById(id).then((curso)=>{
+    curso.remove().then((curso)=>{
+      res.status(200).send(curso);
+    },(e)=>{
+      res.status(400).send(e);
+    })
+  })
+})
+
+app.delete('/escolas/:id', (req,res)=>{
+  var id = req.params.id;
+  Instituicao.findById(id).then((instituicao)=>{
+    instituicao.remove().then((instituicao)=>{
+      res.status(200).send(instituicao);
+    },(e)=>{
+      res.status(400).send(e);
+    })
+  })
 })
 
 app.post('/admin/register', (req, res) =>{
@@ -313,4 +343,4 @@ app.listen(port, () => {
   console.log(`Started on port ${port}`);
 })
 
-module.exports = { app };CargaHoraria
+module.exports = { app }

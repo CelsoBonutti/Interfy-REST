@@ -1,6 +1,6 @@
 {
   "name": "interfy-server",
-  "version": "0.1",
+  "version": "1.0.0",
   "description": "API Rest para o site da Interfy",
   "main": "index.js",
   "scripts": {
