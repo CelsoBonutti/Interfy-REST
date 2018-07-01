@@ -145,9 +145,7 @@ InstituicaoSchema.pre('remove', function(next){
 
 InstituicaoSchema.statics.exists = function(id){
     Instituicao = this;
-
     return Instituicao.count({_id: id}).then((count)=>{
-        console.log(count);
         return (count>0);
     })
 }
