@@ -27,7 +27,6 @@ var { Instituicao } = require('./models/ies');
 var { Curso } = require('./models/curso');
 var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
-var { Paises } = require('./models/pais');
 var { Turno } = require('./models/turno');
 var { Intensidade } = require('./models/intensidade');
 var { Pais } = require('./models/pais');
@@ -80,14 +79,13 @@ app.patch('/users/me', authenticate, (req, res) =>{
     },(e)=>{
       res.status(400).send(e);
     })
-    res.status(200).send(user);
   })
 })
 
 //Exclusão de usuário
 
 app.delete('/users/me', authenticate, (req,res) =>{
-  var id = req.user.id;https://play.google.com/music/playlist/AMaBXyl3t-dRDwinNQWgH4MYSkSIW9NQoYZPz7ELf9eDJtTVMb7SxCr6C0rGHdTWHSAm8H_CvJz6oeVFjiycZDZ3LHBbLR_iYg%3D%3D
+  var id = req.user.id;
   
   User.findByIdAndRemove(id).then((user) =>{
     res.status(200).send(user);
@@ -204,7 +202,7 @@ app.post('/intercambios', authenticate, (req, res) =>{
 //Retornar informações do país
 
 app.get('/pais', (req, res) =>{
-  Paises.findBySigla(req.body.pais).then((pais) =>{
+  Pais.find().then((pais) =>{
     res.status(200).send(pais);
   }, () =>{
     res.status(404).send();
@@ -214,7 +212,7 @@ app.get('/pais', (req, res) =>{
 //Registrar informações de países
 app.post('/pais/register', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['nome', 'sigla', 'capital', 'continente', 'linguas', 'moeda', 'descricao', 'vistos', 'clima', 'sugestao']);
-  var pais = new Paises(body);
+  var pais = new Pais(body);
   
   pais.save().then((pais) =>{
     res.status(200).send(pais);
@@ -229,6 +227,7 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
 app.get('/escolas', (req, res) => {
   var filter = req.query;
   Instituicao.findByFilter(filter).then((escolas) =>{
+    console.log(escolas);
     res.status(200).send(escolas);
   },(e) =>{
     res.status(400).send(e);
@@ -252,22 +251,10 @@ app.post('/escolas/register', (req, res) => {
 
 app.post('/cursos/register', (req, res) =>{
   var curso = _.pick(req.body, ['cursos']).cursos;
-
-  // curso.forEach(curso=>{
-  //   Instituicao.findById(curso.escola).then((escola)=>{
-  //     if(!escola){
-  //       res.status(404).send('Escola não encontrada');
-  //     }
-  //   }).catch((e)=>{
-  //     res.status(400).send(e);
-  //   })
-  // })
-
+  
   Curso.create(curso).then((curso) =>{
     res.status(200).send(curso);
   },(e)=>{
-    res.status(400).send(e);
-  }).catch((e)=>{
     res.status(400).send(e);
   })
 })

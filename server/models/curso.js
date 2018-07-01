@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const moment = require('moment');
 const _ = require('lodash');
-const { Intensidade } = require('./intensidade')
+const { Instituicao } = require('./ies')
+const { Intensidade } = require('./intensidade');
 
 var CursoSchema = new mongoose.Schema({
     titulo: {
@@ -17,7 +18,20 @@ var CursoSchema = new mongoose.Schema({
     instituicao: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Instituicao',
-        required: true
+        required: true,
+        validate:{
+            validator: function(instituicao){
+                var { Instituicao } = require('./ies');
+                return Instituicao.findById(instituicao).then((instituicao)=>{
+                    if(!instituicao)
+                        return false;
+                    return true;
+                },()=>{
+                    return false;
+                })
+            },
+            message: 'Escola inexistente'
+        }
     }
 })
 

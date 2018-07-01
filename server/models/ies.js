@@ -66,7 +66,7 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
     return Instituicao.find(filtroCidade)
         .then((instituicao) =>{
             instituicaoId = _.map(instituicao, '_id');
-
+            
             var filtroCurso;
             if(filter.curso){
                 filtroCurso = {
@@ -126,7 +126,7 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
                                 sort:'titulo'
                             },
                             sort:'descricao'
-                        }).then()
+                        })
                     })
             })
     })
@@ -142,6 +142,15 @@ InstituicaoSchema.pre('remove', function(next){
     })
     next();
 })
+
+InstituicaoSchema.statics.exists = function(id){
+    Instituicao = this;
+
+    return Instituicao.count({_id: id}).then((count)=>{
+        console.log(count);
+        return (count>0);
+    })
+}
 
 var Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
 
