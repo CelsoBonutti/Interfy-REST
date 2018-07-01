@@ -227,7 +227,6 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
 app.get('/escolas', (req, res) => {
   var filter = req.query;
   Instituicao.findByFilter(filter).then((escolas) =>{
-    console.log(escolas);
     res.status(200).send(escolas);
   },(e) =>{
     res.status(400).send(e);

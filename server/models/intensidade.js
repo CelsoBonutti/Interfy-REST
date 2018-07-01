@@ -11,12 +11,26 @@ var IntensidadeSchema = new mongoose.Schema({
     instituicao: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Instituicao',
-        required: true
+        required: true,
+        validate:{
+            validator: function(instituicao){
+                var { Instituicao } = require('./ies');     
+                return Instituicao.exists(instituicao);
+            },
+            message: 'Escola inexistente'
+        }
     },
     curso: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Curso',
-        required: true
+        required: true,
+        validate:{
+            validator: function(curso){
+                var { Curso } = require('./curso');
+                return Curso.exists(curso);
+            },
+            message: 'Curso inexistente'
+        }
     }
 })
 
@@ -42,6 +56,8 @@ IntensidadeSchema.pre('remove', function(next){
     })
     next();
 })
+
+
 
 var Intensidade = mongoose.model('Intensidade', IntensidadeSchema);
 
