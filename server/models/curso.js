@@ -18,7 +18,7 @@ var CursoSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(instituicao){
-                var { Instituicao } = require('./ies');
+                var { Instituicao } = require('./ies');  
                 return Instituicao.exists(instituicao);
             },
             message: 'Escola inexistente'
@@ -36,6 +36,13 @@ CursoSchema.pre('remove', function(next){
     })
     next();
 })
+
+CursoSchema.statics.exists = function(id){
+    Curso = this;
+    return Curso.count({_id: id}).then((count)=>{
+        return (count>0);
+    })
+}
 
 var Curso = mongoose.model('Curso', CursoSchema);
 
