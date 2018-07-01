@@ -43,6 +43,13 @@ IntensidadeSchema.pre('remove', function(next){
     next();
 })
 
+IntensidadeSchema.statics.exists = function(id){
+    Intensidade = this;
+    return Intensidade.count({_id: id}).then((count)=>{
+        return (count>0);
+    })
+}
+
 var Intensidade = mongoose.model('Intensidade', IntensidadeSchema);
 
 module.exports = { Intensidade };

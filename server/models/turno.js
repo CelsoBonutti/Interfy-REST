@@ -34,16 +34,28 @@ var TurnoSchema = new mongoose.Schema({
     instituicao: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Instituicao',
-        required: true
+        required: true,
+        validate:{
+            validator: function(instituicao){
+                var { Instituicao } = require('./ies');
+                return Instituicao.exists(instituicao);
+            },
+            message: 'A escola que está tentando ser registrada não existe.'
+        }
     },
     intensidade: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Intensidade',
-        required: true
+        required: true,
+        validate:{
+            validator: function(intensidade){
+                var { Intensidade } = require('./intensidade');
+                return Intensidade.exists(intensidade);
+            },
+            message: 'Intensidade inexistente'
+        }
     }
 })
-
-
 
 var Turno = mongoose.model('Turno', TurnoSchema);
 

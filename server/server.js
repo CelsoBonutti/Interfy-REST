@@ -50,9 +50,8 @@ app.use(function(req, res, next) {
 
 //Registro de usuários
 app.post('/users/register', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'sexo']);
+  var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'genero']);
   var user = new User(body);
-
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
@@ -66,7 +65,7 @@ app.post('/users/register', (req, res) => {
 app.patch('/users/me', authenticate, (req, res) =>{
   var id = req.user.id;
   var newPassword = _.pick(req.body, ['password']).password;
-  var novasInformacoes = _.pick(req.body, ['nome', 'sobrenome', 'telefone', 'sexo']);
+  var novasInformacoes = _.pick(req.body, ['nome', 'sobrenome', 'telefone', 'genero']);
   
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();
