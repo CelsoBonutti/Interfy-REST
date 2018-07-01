@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://192.168.0.28/dev', { useMongoClient: true });
+mongoose.connect(process.env.MONGO_STR, { useMongoClient: true });
 
 module.exports = { mongoose };
