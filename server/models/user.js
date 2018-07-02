@@ -3,6 +3,7 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
+const randomstring = require('randomstring');
 
 var UserSchema = new mongoose.Schema({
   email: {
@@ -59,8 +60,11 @@ var UserSchema = new mongoose.Schema({
   }],
   active: {
     type: Boolean,
-    required: true,
-    default: false
+    required: true
+  },
+  verificationCode: {
+    type: String,
+    required: false
   }
 });
 
@@ -91,10 +95,12 @@ UserSchema.methods.generateAuthToken = function () {
   return user.save().then(() => {
     return token;
   });
-};
+}
+
 
 UserSchema.pre('save', function (next) {
   var user = this;
+  user.wasNew = user.isNew;
 
   if (user.isModified('password')) {
     bcrypt.genSalt(10, (err, salt) => {
@@ -109,9 +115,39 @@ UserSchema.pre('save', function (next) {
   }
 })
 
-UserSchema.statics.findByCredentials = function (email, password) {
+UserSchema.post('save', function(next){
+  var user = this;
+  
+  if(user.wasNew){
+    const { Transporter } = require('../db/nodemailer');
+
+    var verificationMail = {
+      from: '"Celso Bonutti Filho " <celso.bonutti@interfy.com.br>',
+      to: user.email,
+      subject: 'Interfy: Verifique seu e-mail!',
+      html : `Olá!,<br> Por favor, clique no <a href=http://localhost:8000/users/confirm/${user.verificationCode}>link</a> para verificar seu e-mail!<br>` 
+    }
+
+    Transporter.sendMail(verificationMail).then((info)=>{
+      console.log('Pronto');
+    },(e)=>{
+      console.log(e);
+    })
+  }
+})
+
+UserSchema.statics.activateEmail = function(token){
   var User = this;
 
+  return User.findOne({verificationCode: token, active: false}).then((user)=>{
+    user.active = true;
+    return user.save();
+  })
+}
+
+UserSchema.statics.findByCredentials = function (email, password) {
+  var User = this;
+  
   return User.findOne({ email }).then((user) => {
     if (!user) {
       return Promise.reject();
@@ -128,7 +164,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
       })
     })
   })
-};
+}
 
 UserSchema.statics.findByToken = function (token) {
   var User = this;

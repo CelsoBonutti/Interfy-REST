@@ -22,6 +22,8 @@
     "mongodb": "^2.2.5",
     "mongoose": "^4.5.9",
     "node-currency-swap": "^1.0.6",
+    "nodemailer": "^4.6.7",
+    "randomstring": "^1.1.5",
     "validator": "^9.4.1"
   },
   "devDependencies": {

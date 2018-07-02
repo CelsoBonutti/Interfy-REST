@@ -20,6 +20,7 @@ const bodyParser = require('body-parser');
 const port = process.env.PORT;
 const jwt = require('jsonwebtoken');
 var { ObjectID } = require('mongodb');
+const random = require('randomstring');
 
 //Models
 var { User } = require('./models/user');
@@ -52,6 +53,8 @@ app.use(function(req, res, next) {
 app.post('/users/register', (req, res) => {
   var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'genero']);
   var user = new User(body);
+  user.verificationCode = random.generate();
+  user.active = false;
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
@@ -98,9 +101,14 @@ app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
 
   User.findByCredentials(body.email, body.password).then((user) => {
+    if(user.active){
     return user.generateAuthToken().then((token) => {
-      res.header('x-auth', token).send(user);
+      res.header('x-auth', token).status(200).send(user);
     });
+    }
+    else{
+      res.status(401).send('Por favor, confirme seu e-mail.')
+    }
   }).catch((e) => {
     res.status(400).send();
   })
@@ -118,6 +126,14 @@ app.delete('/users/me/token', authenticate, (req, res) => {
 //Retornar informação do usuário
 app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
+})
+
+app.get('/users/confirm/:id', (req, res)=>{
+  User.activateEmail(req.params.id).then(()=>{
+    res.status(200).send('Ativado');
+  },(e)=>{
+    res.status(400).send();
+  })
 })
 
 //Rotas de informações pessoais de usuários
@@ -232,13 +248,9 @@ app.get('/escolas', (req, res) => {
   })
 })
 
-app.delete('/escolas', (req, res) =>{
-
-})
-
 //Rotas de registro de escolas
 
-app.post('/escolas/register', (req, res) => {
+app.post('/escolas/register', authenticateAdmin, (req, res) => {
   var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
   Instituicao.create(escola).then((escola) =>{
     res.status(200).send(escola);
@@ -247,7 +259,7 @@ app.post('/escolas/register', (req, res) => {
   })
 })
 
-app.post('/cursos/register', (req, res) =>{
+app.post('/cursos/register', authenticateAdmin, (req, res) =>{
   var curso = _.pick(req.body, ['cursos']).cursos;
   
   Curso.create(curso).then((curso) =>{
@@ -257,7 +269,7 @@ app.post('/cursos/register', (req, res) =>{
   })
 })
 
-app.post('/intensidades/register', (req, res) =>{
+app.post('/intensidades/register', authenticateAdmin, (req, res) =>{
   var intensidade = _.pick(req.body, ['intensidades']).intensidades;
   Intensidade.create(intensidade).then((intensidade) =>{
     res.status(200).send(intensidade);
@@ -266,7 +278,7 @@ app.post('/intensidades/register', (req, res) =>{
   })
 })
 
-app.post('/turnos/register', (req, res) =>{
+app.post('/turnos/register', authenticateAdmin, (req, res) =>{
   var turno = _.pick(req.body, ['turnos']).turnos;
   Turno.create(turno).then((turno) =>{
     res.status(200).send(turno);
@@ -286,7 +298,7 @@ app.delete('/turnos/:id', authenticateAdmin, (req, res) =>{
   })
 })
 
-app.delete('/intensidades/:id', (req,res)=>{
+app.delete('/intensidades/:id', authenticateAdmin, (req,res)=>{
   var id = req.params.id;
   Intensidade.findById(id).then((intensidade)=>{
     intensidade.remove().then((intensidade)=>{
@@ -297,7 +309,7 @@ app.delete('/intensidades/:id', (req,res)=>{
   })
 })
 
-app.delete('/cursos/:id', (req, res)=>{
+app.delete('/cursos/:id', authenticateAdmin, (req, res)=>{
   var id = req.params.id;
   Curso.findById(id).then((curso)=>{
     curso.remove().then((curso)=>{
@@ -308,7 +320,7 @@ app.delete('/cursos/:id', (req, res)=>{
   })
 })
 
-app.delete('/escolas/:id', (req,res)=>{
+app.delete('/escolas/:id', authenticateAdmin, (req,res)=>{
   var id = req.params.id;
   Instituicao.findById(id).then((instituicao)=>{
     instituicao.remove().then((instituicao)=>{
@@ -319,10 +331,13 @@ app.delete('/escolas/:id', (req,res)=>{
   })
 })
 
-app.post('/admin/register', (req, res) =>{
+app.post('/admin/register', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, []);
 })
 
+app.get('/testEmail', (req, res)=>{
+  
+})
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
