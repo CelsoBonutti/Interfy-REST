@@ -64,6 +64,29 @@ var IntercambioSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    status: {
+        type: String,
+        required: true,
+        validate:{
+            validator: function(status){
+                return (validator.isIn(status, ['O', 'P', 'G']));
+            }
+        }
+    },
+    dataDeCompra:{
+        type: Date,
+        required: true,
+        default: Date.now
+    }
+})
+
+IntercambioSchema.pre('validate', function(next){
+    intercambio = this;
+    if(intercambio.isNew){
+        intercambio.dataDeCompra = Date.now;
+        intercambio.status = 'O';
+        
     }
 })
 
