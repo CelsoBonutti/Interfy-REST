@@ -238,6 +238,25 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
 
 //Rotas de escola
 
+//Rota update escolas
+app.patch('/escolas/:id', authenticateAdmin ,(req, res) =>{
+  var id= req.params.id;
+  var novasInformacoes = _.pick(req.body, [ 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
+
+   if (!ObjectID.isValid(id._id)) {
+     console.log("caiu aqui")
+    return res.status(404).send();
+   }
+
+  Instituicao.findByIdAndUpdate(id,{$set: novasInformacoes}, {new: true}).then((instituicao) =>{
+    return instituicao.save().then((Instituicao) =>{
+      res.status(200).send(instituicao);
+    },(e)=>{
+      res.status(400).send(e);
+    })
+  })
+})
+
 //Rotas de retorno de informações das escolas
 app.get('/escolas', (req, res) => {
   var filter = req.query;
