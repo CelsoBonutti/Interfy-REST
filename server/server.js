@@ -53,6 +53,7 @@ app.use(function(req, res, next) {
 app.post('/admin/register', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['email', 'password']);
   var admin = new Admin(body);
+
   admin.save().then(() =>{
     return admin.generateAuthToken();
   }).then((token) =>{
@@ -62,6 +63,27 @@ app.post('/admin/register', authenticateAdmin, (req, res) =>{
   })
 })
 
+//Rota de login de admin
+app.post('/admin/login', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+
+  Admin.findByCredentials(body.email, body.password).then((admin) => {
+    return admin.generateAuthToken().then((token) => {
+      res.header('x-auth', token).status(200).send(admin);
+    });
+  }).catch((e) => {
+    res.status(400).send();
+  })
+})
+
+//Rota de logout de admin
+app.delete('/admin/me/token', authenticateAdmin, (req, res) => {
+  req.admin.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
+    res.status(400).send();
+  })
+})
 
 //Rotas dos usuários
 
