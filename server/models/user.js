@@ -122,7 +122,7 @@ UserSchema.post('save', function(next){
     const { Transporter } = require('../db/nodemailer');
 
     var verificationMail = {
-      from: '"Celso Bonutti Filho " <celso.bonutti@interfy.com.br>',
+      from: '"Interfy" <queroviajar@interfy.com.br>',
       to: user.email,
       subject: 'Interfy: Verifique seu e-mail!',
       html : `Olá!,<br> Por favor, clique no <a href=http://localhost:8000/users/confirm/${user.verificationCode}>link</a> para verificar seu e-mail!<br>` 

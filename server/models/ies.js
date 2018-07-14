@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 const { Curso } = require('./curso');
+const { Intensidade } = require('./intensidade');
+const { Turno } = require('./turno');
 
 var InstituicaoSchema = new mongoose.Schema({
     nome: {
@@ -60,11 +62,9 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
             pais: filter.pais
         } 
     }
-
     return Instituicao.find(filtroCidade)
         .then((instituicao) =>{
             instituicaoId = _.map(instituicao, '_id');
-            
             var filtroCurso;
             if(filter.curso){
                 filtroCurso = {
@@ -119,11 +119,11 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
                                 path:'curso',
                                 populate:{
                                     path:'instituicao',
-                                    sort: 'nome'
+                                    group: 'nome'
                                 },
-                                sort:'titulo'
+                                group:'titulo'
                             },
-                            sort:'descricao'
+                            group:'descricao'
                         })
                     })
             })

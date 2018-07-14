@@ -1,5 +1,6 @@
 //Configuração das variáveis de ambiente
 var env = process.env.NODE_ENV || 'development';
+
 console.log('env *****', env);
 
 if (env === 'development') {
@@ -24,6 +25,7 @@ const random = require('randomstring');
 
 //Models
 var { User } = require('./models/user');
+var { Admin } = require('./models/admin');
 var { Instituicao } = require('./models/ies');
 var { Curso } = require('./models/curso');
 var { Informacoes } = require('./models/informacoesUsuario');
@@ -37,7 +39,7 @@ var { authenticate } = require('./middleware/authenticate');
 var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 
 //Configuração dos frameworks
-var app = express();https://play.google.com/music/playlist/AMaBXyl3t-dRDwinNQWgH4MYSkSIW9NQoYZPz7ELf9eDJtTVMb7SxCr6C0rGHdTWHSAm8H_CvJz6oeVFjiycZDZ3LHBbLR_iYg%3D%3D
+var app = express();
 app.use(bodyParser.json());
 
 //Setando CORS
@@ -46,6 +48,20 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+//Rota de registro de admin
+app.post('/admin/register', authenticateAdmin, (req, res) =>{
+  var body = _.pick(req.body, ['email', 'password']);
+  var admin = new Admin(body);
+  admin.save().then(() =>{
+    return admin.generateAuthToken();
+  }).then((token) =>{
+    res.header('x-auth', token).send(admin);
+  }).catch((e) =>{
+    res.status(400).send(e);
+  })
+})
+
 
 //Rotas dos usuários
 
@@ -143,7 +159,7 @@ app.post('/info/me', authenticate, (req, res) =>{
   var body = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
   var informacoes = new Informacoes(body);
 
-  informacoes.save().then((informacoes) =>{
+  informacoes.save().then((informacoes) =>{ 
     res.status(200).send(informacoes)
   }, (e) =>{
     res.status(400).send(e)
@@ -241,8 +257,8 @@ app.post('/pais/register', authenticateAdmin, (req, res) =>{
 //Rotas de retorno de informações das escolas
 app.get('/escolas', (req, res) => {
   var filter = req.query;
-  Instituicao.findByFilter(filter).then((escolas) =>{
-    res.status(200).send(escolas);
+  Instituicao.findByFilter(filter).then((turnos) =>{
+    res.status(200).send(turnos);
   },(e) =>{
     res.status(400).send(e);
   })
@@ -333,13 +349,6 @@ app.delete('/escolas/:id', authenticateAdmin, (req,res)=>{
   })
 })
 
-app.post('/admin/register', authenticateAdmin, (req, res) =>{
-  var body = _.pick(req.body, []);
-})
-
-app.get('/testEmail', (req, res)=>{
-  
-})
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);

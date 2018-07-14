@@ -1,4 +1,4 @@
-var { Admin } = require('./../models/userAdmin');
+var { Admin } = require('../models/admin')
 
 var authenticateAdmin = (req, res, next) => {
   var token = req.header('x-auth');
