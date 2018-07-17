@@ -15,13 +15,15 @@ var { mongoose } = require('./db/mongoose');
 
 
 //Bibliotecas
-const _ = require('lodash');
-const express = require('express');
+var multiparty = require('connect-multiparty');
 const bodyParser = require('body-parser');
-const port = process.env.PORT;
-const jwt = require('jsonwebtoken');
-var { ObjectID } = require('mongodb');
 const random = require('randomstring');
+var { ObjectID } = require('mongodb');
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const _ = require('lodash');
+var fs = require('fs');
+const port = process.env.PORT;
 
 //Models
 var { User } = require('./models/user');
