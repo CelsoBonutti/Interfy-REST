@@ -26,14 +26,15 @@ var fs = require('fs');
 const port = process.env.PORT;
 
 //Models
-var { User } = require('./models/user');
-var { Admin } = require('./models/admin');
-var { Instituicao } = require('./models/ies');
-var { Curso } = require('./models/curso');
 var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
-var { Turno } = require('./models/turno');
 var { Intensidade } = require('./models/intensidade');
+var { Instituicao } = require('./models/ies');
+var { Foto } = require('./models/foto');
+var { Admin } = require('./models/admin');
+var { Curso } = require('./models/curso');
+var { Turno } = require('./models/turno');
+var { User } = require('./models/user');
 var { Pais } = require('./models/pais');
 
 //Middleware
@@ -42,12 +43,17 @@ var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 
 //Configuração dos frameworks
 var app = express();
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use(multiparty());
 
 //Setando CORS
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
+  res.setHeader("Access-Control-Allow-Credentials",true);
+  res.header("Access-Control-Allow-Origin", "*");
+
   next();
 });
 
