@@ -57,6 +57,55 @@ app.use(function(req, res, next) {
   next();
 });
 
+// Path da pasta pública que armazenará as fotos.
+  var path_public = __dirname + '/public';
+
+
+  app.use(express.static(path_public));
+
+
+app.get('/', (req, res) => {
+  res.send('Estou no Heroku');
+});
+
+app.post('/upload/imagem',function(req,res){
+
+
+  var date = new Date();
+  var time_stamp = date.getTime();
+
+  var url_imagem = time_stamp + '-' + req.files.arquivo.originalFilename;
+  
+  var path_origem = req.files.arquivo.path;
+  var path_destino = path_public + '/'+ url_imagem;
+
+  fs.rename(path_origem, path_destino, function(err){
+    // Exclui a foto da pasta temporária.
+    fs.unlink(path_origem, function(err){
+      res.redirect('/');
+    });
+    
+       var dados = {
+           url_imagem:url_imagem,
+          titulo:req.body.titulo
+      }
+  
+      Foto.create(dados).then((dados) =>{ 
+        res.status(200).send({'status' : 'inclusão realizada com sucesso'});
+      }).catch ((err) =>{
+        res.status(400).send({'status' : 'erro'});
+      })
+  });
+});
+
+app.get('/fotos',function(req,res){
+  Foto.find().then((fotos) =>{ 
+    res.status(200).send(fotos);
+  }, () =>{
+    res.status(404).send();
+  })
+});
+
 //Rota de registro de admin
 app.post('/admin/register', authenticateAdmin, (req, res) =>{
   var body = _.pick(req.body, ['email', 'password']);
@@ -145,7 +194,6 @@ app.delete('/users/me', authenticate, (req,res) =>{
 //Rota de login
 app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
-
   User.findByCredentials(body.email, body.password).then((user) => {
     if(user.active){
     return user.generateAuthToken().then((token) => {
@@ -167,10 +215,6 @@ app.delete('/users/me/token', authenticate, (req, res) => {
   }, () => {
     res.status(400).send();
   })
-})
-
-app.get('/', authenticate, (req, res) => {
-  res.send('Estou no Heroku');
 })
 
 //Retornar informação do usuário
