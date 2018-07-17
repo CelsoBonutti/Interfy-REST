@@ -123,6 +123,10 @@ app.delete('/users/me/token', authenticate, (req, res) => {
   })
 })
 
+app.get('/', authenticate, (req, res) => {
+  res.send('Estou no Heroku');
+})
+
 //Retornar informação do usuário
 app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
