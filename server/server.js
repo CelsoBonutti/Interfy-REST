@@ -23,6 +23,9 @@ const jwt = require('jsonwebtoken');
 var { ObjectID } = require('mongodb');
 const random = require('randomstring');
 
+//Rotas
+const rotaIntercambios = require('./routes/intercambios');
+
 //Models
 var { User } = require('./models/user');
 var { Admin } = require('./models/admin');
@@ -48,6 +51,8 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.use('/')
 
 //Rota de registro de admin
 app.post('/admin/register', authenticateAdmin, (req, res) =>{
