@@ -44,7 +44,19 @@ var InstituicaoSchema = new mongoose.Schema({
     atividadesExtra: [{
         type: String,
         required: true
-    }]
+    }], 
+    adicional: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Adicional',
+        required: true,
+        validate:{
+            validator: function(adicional){
+                var { Adicional } = require('./adicional');     
+                return Adicional.exists(adicional);
+            },
+            message: 'adicional inexistente'
+        }
+    },
 })
 
 InstituicaoSchema.statics.findByFilter = function (filter) {

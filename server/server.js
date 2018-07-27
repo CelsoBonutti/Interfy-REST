@@ -29,6 +29,7 @@ const port = process.env.PORT;
 var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
 var { Intensidade } = require('./models/intensidade');
+var { Adicional } = require('./models/adicional');
 var { Instituicao } = require('./models/ies');
 var { Foto } = require('./models/foto');
 var { Admin } = require('./models/admin');
@@ -305,6 +306,18 @@ app.post('/intercambios', authenticate, (req, res) =>{
   })
 })
 
+//Registrar informações de adicionais
+app.post('/adicional/register', (req, res) =>{
+  console.log(req.body)
+  var body = _.pick(req.body, ['adicionais']);
+  var adicional = new Adicional(body);
+
+  adicional.save().then((adicional) =>{
+    res.status(200).send(adicional);
+  }, ()=>{
+    res.status(400).send();
+  })
+})
 
 //Rotas de países
 
@@ -345,7 +358,7 @@ app.get('/escolas', (req, res) => {
 //Rotas de registro de escolas
 
 app.post('/escolas/register', authenticateAdmin, (req, res) => {
-  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
+  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra','adicional']);
   Instituicao.create(escola).then((escola) =>{
     res.status(200).send(escola);
   },(e)=>{
