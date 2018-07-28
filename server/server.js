@@ -27,6 +27,7 @@ const port = process.env.PORT;
 
 //Rotas
 const rotaIntercambios = require('./routes/intercambios');
+const rotasPagamentos = require('./routes/pagamentos');
 
 //Models
 var { Informacoes } = require('./models/informacoesUsuario');
@@ -44,7 +45,7 @@ var { Pais } = require('./models/pais');
 var { authenticate } = require('./middleware/authenticate');
 var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 
-//Configuração dos frameworks
+//Configuração dos pacotes
 var app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -60,9 +61,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-<<<<<<< HEAD
-app.use('/')
-=======
 // Path da pasta pública que armazenará as fotos.
   var path_public = __dirname + '/public';
 
@@ -111,7 +109,6 @@ app.get('/fotos',function(req,res){
     res.status(404).send();
   })
 });
->>>>>>> a97dcbc1da248c27646e6ff5bb396f53b5ddb207
 
 //Rota de registro de admin
 app.post('/admin/register', authenticateAdmin, (req, res) =>{
@@ -278,40 +275,6 @@ app.patch('/info/me', authenticate, (req, res) => {
     res.status(400).send(e);
   })
 })
-
-//Rotas de intercâmbio
-
-//Retornar intercâmbios do usuário
-app.get('/intercambios', authenticate, (req, res) =>{
-  var id = req.user._id
-
-  if(!ObjectID.isValid(id)){
-    return res.status(404).send();
-  }
-
-  Intercambios.findByUserIdAndPopulate(id).then((intercambios) =>{
-    if(!intercambios){
-      return res.status(404).send();
-    }
-    res.status(200).send({ intercambios });
-  }).catch((e) =>{
-    res.status(400).send(e);
-  })
-})
-
-//Registro de intercâmbios para usuário
-app.post('/intercambios', authenticate, (req, res) =>{
-  var body = _.pick(req.body, ['adicionais', 'curso'])
-  body._userId = req.user._id;
-  var novoIntercambio = new Intercambios(novoIntercambio);
-
-  novoIntercambio.save().then(() =>{
-    res.status(200).send();
-  }).catch((e) =>{
-    res.status(400).send();
-  })
-})
-
 
 //Rotas de países
 

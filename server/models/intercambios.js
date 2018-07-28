@@ -78,6 +78,10 @@ var IntercambioSchema = new mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now
+    },
+    transactionId:{
+        type: Number,
+        required: false
     }
 })
 
@@ -86,7 +90,6 @@ IntercambioSchema.pre('validate', function(next){
     if(intercambio.isNew){
         intercambio.dataDeCompra = Date.now;
         intercambio.status = 'O';
-        
     }
 })
 
