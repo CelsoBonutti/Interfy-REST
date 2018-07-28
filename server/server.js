@@ -312,14 +312,13 @@ app.post('/intercambios', authenticate, (req, res) =>{
 
 //Registrar informações de adicionais
 app.post('/adicional/register', (req, res) =>{
-  console.log(req.body)
   var body = _.pick(req.body, ['descricao','valor','instituicao','intercambio']);
   var adicional = new Adicional(body);
 
   adicional.save().then((adicional) =>{
     res.status(200).send(adicional);
-  }, ()=>{
-    res.status(400).send();
+  }, (err)=>{
+    res.status(400).send(err);
   })
 })
 
