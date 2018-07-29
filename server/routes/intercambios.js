@@ -24,7 +24,7 @@ router.get('/', authenticate, (req, res) =>{
   
   //Registro de intercâmbios para usuário
   router.post('/', authenticate, (req, res) =>{
-    var body = _.pick(req.body, ['adicionais', 'curso'])
+    var body = _.pick(req.body, ['curso'])
     body._userId = req.user._id;
     var novoIntercambio = new Intercambios(novoIntercambio);
   

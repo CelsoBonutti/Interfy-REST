@@ -3,24 +3,24 @@ const validator = require('validator');
 const _ = require('lodash');
 
 var IntercambioSchema = new mongoose.Schema({
-    adicionais: {
-        descricao: {
-            type: String,
-            required: true
-        },
+    // adicionais: {
+    //     descricao: {
+    //         type: String,
+    //         required: true
+    //     },
         // icone: {
         //     type: String,
         //     required: true
         // },
-        valor: {
-            type: Number,
-            required: true,
-            validate: {
-                validator: validator.isCurrency,
-                message: '{VALUE} não é um valor válido.'
-            }
-        }
-    },
+    //     valor: {
+    //         type: Number,
+    //         required: true,
+    //         validate: {
+    //             validator: validator.isCurrency,
+    //             message: '{VALUE} não é um valor válido.'
+    //         }
+    //     }
+    // },
     curso: {
         tipo: {
             type: String,
@@ -107,6 +107,13 @@ IntercambioSchema.statics.findByUserIdAndPopulate = function (_userId) {
     return Intercambio.find({ _userId }).then().populate({
         path: 'instituicao',
         select: 'nome'
+    })
+}
+
+IntercambioSchema.statics.exists = function(id){
+    Intercambio = this;
+    return Intercambio.count({_id: id}).then((count)=>{
+        return (count>0);
     })
 }
 

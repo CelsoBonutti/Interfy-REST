@@ -4,16 +4,42 @@ const _ = require('lodash');
 
 
 var AdicionalSchema = new mongoose.Schema({
-    adicionais: [{
-            descricao: {
-                type: String,
-                required: true
-            },
-                valor:{
-                    type: Number,
-                    required: true
+ descricao: {
+    type: String,
+    required: true
+    },
+    valor: {
+    type: Number,
+    required: true,
+    validate: {
+    validator: validator.isCurrency,
+    message: '{VALUE} não é um valor válido.'
+        }
+    },
+instituicao: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Instituicao',
+    required: true,
+    validate:{
+    validator: function(instituicao){
+        var { Instituicao } = require('./ies');  
+        return Instituicao.exists(instituicao);
                 },
-            }],
+        message: 'Escola inexistente'
+                }
+            },
+intercambio: {
+    type: mongoose.Schema.Types.ObjectId,
+        ref: 'Intercambio',
+        required: true,
+        validate:{
+                validator: function(intercambio){
+                    var { Intercambio } = require('./intercambios');  
+                        return Intercambio.exists(intercambio);
+                    },
+                    message: 'Intercambio inexistente'
+                }
+            }
 })
 
 AdicionalSchema.statics.exists = function(id){

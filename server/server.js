@@ -299,7 +299,7 @@ app.get('/intercambios', authenticate, (req, res) =>{
 
 //Registro de intercâmbios para usuário
 app.post('/intercambios', authenticate, (req, res) =>{
-  var body = _.pick(req.body, ['adicionais', 'curso'])
+  var body = _.pick(req.body, ['curso'])
   body._userId = req.user._id;
   var novoIntercambio = new Intercambios(novoIntercambio);
 
@@ -312,14 +312,13 @@ app.post('/intercambios', authenticate, (req, res) =>{
 
 //Registrar informações de adicionais
 app.post('/adicional/register', (req, res) =>{
-  console.log(req.body)
-  var body = _.pick(req.body, ['adicionais']);
+  var body = _.pick(req.body, ['descricao','valor','instituicao','intercambio']);
   var adicional = new Adicional(body);
 
   adicional.save().then((adicional) =>{
     res.status(200).send(adicional);
-  }, ()=>{
-    res.status(400).send();
+  }, (err)=>{
+    res.status(400).send(err);
   })
 })
 
@@ -362,7 +361,7 @@ app.get('/escolas', (req, res) => {
 //Rotas de registro de escolas
 
 app.post('/escolas/register', authenticateAdmin, (req, res) => {
-  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra','adicional']);
+  var escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
   Instituicao.create(escola).then((escola) =>{
     res.status(200).send(escola);
   },(e)=>{
