@@ -34,7 +34,7 @@ var { Informacoes } = require('./models/informacoesUsuario');
 var { Intercambios } = require('./models/intercambios');
 var { Intensidade } = require('./models/intensidade');
 var { Adicional } = require('./models/adicional');
-var { Instituicao } = require('./models/ies');
+var { Instituicao } = require('./models/escola');
 var { Foto } = require('./models/foto');
 var { Admin } = require('./models/admin');
 var { Curso } = require('./models/curso');
@@ -151,7 +151,7 @@ app.delete('/admin/me/token', authenticateAdmin, (req, res) => {
 
 //Registro de usuários
 app.post('/users/register', (req, res) => {
-  var body = _.pick(req.body, ['email', 'password', 'nome', 'sobrenome', 'telefone', 'genero']);
+  var body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'telefone', 'genero']);
   var user = new User(body);
   user.verificationCode = random.generate();
   user.active = false;
@@ -168,7 +168,7 @@ app.post('/users/register', (req, res) => {
 app.patch('/users/me', authenticate, (req, res) =>{
   var id = req.user.id;
   var newPassword = _.pick(req.body, ['password']).password;
-  var novasInformacoes = _.pick(req.body, ['nome', 'sobrenome', 'telefone', 'genero']);
+  var novasInformacoes = _.pick(req.body, ['name', 'surname', 'telefone', 'genero']);
   
   if (!ObjectID.isValid(id)) {
     return res.status(404).send();

@@ -19,10 +19,10 @@ var AdicionalSchema = new mongoose.Schema({
 instituicao: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Instituicao',
-    required: true,
+    required: false,
     validate:{
     validator: function(instituicao){
-        var { Instituicao } = require('./ies');  
+        var { Instituicao } = require('./escola');  
         return Instituicao.exists(instituicao);
                 },
         message: 'Escola inexistente'
@@ -31,7 +31,7 @@ instituicao: {
 intercambio: {
     type: mongoose.Schema.Types.ObjectId,
         ref: 'Intercambio',
-        required: true,
+        required: false,
         validate:{
                 validator: function(intercambio){
                     var { Intercambio } = require('./intercambios');  

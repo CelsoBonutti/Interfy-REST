@@ -37,7 +37,7 @@ var TurnoSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(instituicao){
-                var { Instituicao } = require('./ies');
+                var { Instituicao } = require('./escola');
                 return Instituicao.exists(instituicao);
             },
             message: 'A escola que está tentando ser registrada não existe.'

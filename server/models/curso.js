@@ -18,7 +18,7 @@ var CursoSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(instituicao){
-                var { Instituicao } = require('./ies');  
+                var { Instituicao } = require('./escola');  
                 return Instituicao.exists(instituicao);
             },
             message: 'Escola inexistente'

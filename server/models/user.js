@@ -24,11 +24,11 @@ var UserSchema = new mongoose.Schema({
     require: true,
     minlength: 8
   },
-  nome: {
+  name: {
     type: String,
     required: true
   },
-  sobrenome: {
+  surname: {
     type: String,
     required: true
   },
@@ -72,7 +72,7 @@ UserSchema.methods.toJSON = function () {
   var user = this;
   var userObject = user.toObject();
 
-  return _.pick(userObject, ['_id', 'email', 'nome', 'sobrenome', 'telefone', 'sexo']);
+  return _.pick(userObject, ['_id', 'email', 'name', 'surname', 'telefone', 'sexo']);
 };
 
 UserSchema.methods.removeToken = function(token) {
@@ -121,18 +121,6 @@ UserSchema.post('save', function(next){
   if(user.wasNew){
     const { Transporter } = require('../db/nodemailer');
 
-    var verificationMail = {
-      from: '"Interfy" <queroviajar@interfy.com.br>',
-      to: user.email,
-      subject: 'Interfy: Verifique seu e-mail!',
-      html : `Olá!,<br> Por favor, clique no <a href=http://localhost:8000/users/confirm/${user.verificationCode}>link</a> para verificar seu e-mail!<br>` 
-    }
-
-    Transporter.sendMail(verificationMail).then((info)=>{
-      console.log('Pronto');
-    },(e)=>{
-      console.log(e);
-    })
   }
 })
 

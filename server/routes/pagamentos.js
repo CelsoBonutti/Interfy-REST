@@ -13,7 +13,10 @@ router.post('/', (req, res) => {
     pagarme.verifySignature(process.env.API_KEY, req.body, postSignature).then((valido) => {
         if (valido) {
             Intercambio.find({transactionId: req.body.id}).then((intercambio)=>{
-                intercambio.status=
+                intercambio.status = req.body.id;
+                intercambio.save().then(()=>{
+                    res.status(200).send();
+                })
             },()=>{
                 res.status(400).send('Não foi encontrado intercâmbio com este ID de transação.');
             })

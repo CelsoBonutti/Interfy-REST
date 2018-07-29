@@ -3,24 +3,6 @@ const validator = require('validator');
 const _ = require('lodash');
 
 var IntercambioSchema = new mongoose.Schema({
-    // adicionais: {
-    //     descricao: {
-    //         type: String,
-    //         required: true
-    //     },
-        // icone: {
-        //     type: String,
-        //     required: true
-        // },
-    //     valor: {
-    //         type: Number,
-    //         required: true,
-    //         validate: {
-    //             validator: validator.isCurrency,
-    //             message: '{VALUE} não é um valor válido.'
-    //         }
-    //     }
-    // },
     curso: {
         tipo: {
             type: String,
@@ -70,7 +52,7 @@ var IntercambioSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(status){
-                return (validator.isIn(status, ['O', 'P', 'G']));
+                return (validator.isIn(status, ['processing', 'authorized', 'paid', 'refunded', 'waiting_payment', 'pending_refund', 'refused', 'chargedback']));
             }
         }
     },
@@ -89,7 +71,25 @@ IntercambioSchema.pre('validate', function(next){
     intercambio = this;
     if(intercambio.isNew){
         intercambio.dataDeCompra = Date.now;
-        intercambio.status = 'O';
+        intercambio.status = 'processing';
+        next();
+    }
+    next();
+})
+
+IntercambioSchema.post('save', function(next){
+    intercambio = this;
+    if (intercambio.status == 'paid'){
+        var { Transporter } = require('../db/nodemailer');
+        Transporter.sendSoldExchangeMail(intercambio).then(()=>{
+            next();
+        })
+    }
+    else if (intercambio.status == 'refused'){
+        var { Transporter } = require('../db/nodemailer');
+        Transporter.sendRefusedPaymentMail(intercambio).then(()=>{
+            next();
+        })
     }
 })
 
