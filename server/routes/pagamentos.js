@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const authenticate = require('../middleware/authenticate');
 const _ = require('lodash');
 const pagarme = require('pagarme');
-const crypto = require('crypto');
-
 const { Intercambio } = require('../models/intercambios');
 
 router.post('/', (req, res) => {
