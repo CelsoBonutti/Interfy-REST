@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-var { Turno } = require('./models/turno');
-
+var { Turno } = require('../models/turno');
+var { authenticateAdmin } = require('../middleware/authenticateAdmin');
 
 router.post('/register', authenticateAdmin, (req, res) => {
     var turno = _.pick(req.body, ['turnos']).turnos;
@@ -22,4 +22,4 @@ router.delete('/:id', authenticateAdmin, (req, res) => {
     })
 })
 
-modules.exports = router;
+module.exports = router;

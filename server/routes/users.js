@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const authenticate = require('../middleware/authenticate');
 const _ = require('lodash');
-var { authenticate } = require('./middleware/authenticate');
-var { User } = require('./models/user');
+const random = require('randomstring');
+var { authenticate } = require('../middleware/authenticate');
+var { User } = require('../models/user');
 
 router.post('/register', (req, res) => {
     var body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'telefone', 'genero']);

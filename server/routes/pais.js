@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const authenticate = require('../middleware/authenticate');
 const _ = require('lodash');
-var { Pais } = require('./models/pais');
-var { authenticateAdmin } = require('./middleware/authenticateAdmin');
+var { Pais } = require('../models/pais');
+var { authenticateAdmin } = require('../middleware/authenticateAdmin');
 
 //Retornar informações do país
 

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-var { authenticateAdmin } = require('./middleware/authenticateAdmin');
-var { Instituicao } = require('./models/escola');
+var { authenticateAdmin } = require('../middleware/authenticateAdmin');
+var { Instituicao } = require('../models/escola');
 
 router.get('/', (req, res) => {
     var filter = req.query;

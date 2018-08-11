@@ -11,15 +11,9 @@ if (env === 'development') {
   process.env.MONGO_STR = 'mongodb://localhost:27017/test'
 }
 
-var { mongoose } = require('./db/mongoose');
-
-
 //Bibliotecas
 var multiparty = require('connect-multiparty');
 const bodyParser = require('body-parser');
-const random = require('randomstring');
-var { ObjectID } = require('mongodb');
-const jwt = require('jsonwebtoken');
 const express = require('express');
 const _ = require('lodash');
 var fs = require('fs');
@@ -35,23 +29,10 @@ const rotasPagamentos = require('./routes/pagamentos');
 const rotasPaises = require('./routes/pais');
 const rotasTurnos = require('./routes/turnos');
 const rotasUsuarios = require('./routes/users');
+const { mongoose } = require('./db/mongoose');
 
 //Models
-var { Informacoes } = require('./models/informacoesUsuario');
-var { Intercambios } = require('./models/intercambios');
-var { Intensidade } = require('./models/intensidade');
-var { Adicional } = require('./models/adicional');
-var { Instituicao } = require('./models/escola');
 var { Foto } = require('./models/foto');
-var { Admin } = require('./models/admin');
-var { Curso } = require('./models/curso');
-var { Turno } = require('./models/turno');
-var { User } = require('./models/user');
-var { Pais } = require('./models/pais');
-
-//Middleware
-var { authenticate } = require('./middleware/authenticate');
-var { authenticateAdmin } = require('./middleware/authenticateAdmin');
 
 //Configuração dos pacotes
 var app = express();

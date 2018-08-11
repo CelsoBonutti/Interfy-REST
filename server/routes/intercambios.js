@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const authenticate = require('../middleware/authenticate');
+const { authenticate } = require('../middleware/authenticate');
 const _ = require('lodash');
-var { Intercambios } = require('./models/intercambios');
+var { Intercambios } = require('../models/intercambios');
 
 //Retornar intercâmbios do usuário
 router.get('/', authenticate, (req, res) => {

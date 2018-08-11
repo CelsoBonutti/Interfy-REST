@@ -15,4 +15,4 @@ router.post('/adicional/register', authenticateAdmin, (req, res) => {
     })
 })
 
-modules.exports = router;
+module.exports = router;

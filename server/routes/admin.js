@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-var { authenticateAdmin } = require('./middleware/authenticateAdmin');
+var { Admin } = require('../models/admin');
+var { authenticateAdmin } = require('../middleware/authenticateAdmin');
 
 const _ = require('lodash');
 
 //Rota de registro de admin
-router.post('/register', authenticateAdmin, (req, res) => {
+router.post('/register', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
     var admin = new Admin(body);
 
     admin.save().then(() => {
+        console.log("hehe bozzano");
         return admin.generateAuthToken();
     }).then((token) => {
         res.header('x-auth', token).send(admin);

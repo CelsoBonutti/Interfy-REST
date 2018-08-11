@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-var { authenticateAdmin } = require('./middleware/authenticateAdmin');
-var { Intensidade } = require('./models/intensidade');
+var { authenticateAdmin } = require('../middleware/authenticateAdmin');
+var { Intensidade } = require('../models/intensidade');
 
 
 router.post('/register', authenticateAdmin, (req, res) => {
@@ -25,4 +25,4 @@ router.delete('/:id', authenticateAdmin, (req, res) => {
     })
 })
 
-modules.exports = router;
+module.exports = router;
