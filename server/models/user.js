@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 const randomstring = require('randomstring');
+const { constants } = require('../constants');
 
 var UserSchema = new mongoose.Schema({
   email: {
@@ -48,16 +49,6 @@ var UserSchema = new mongoose.Schema({
     maxlength: 1,
     minlength: 1
   },
-  tokens: [{
-    access: {
-      type: String,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-    }
-  }],
   active: {
     type: Boolean,
     required: true
@@ -75,26 +66,12 @@ UserSchema.methods.toJSON = function () {
   return _.pick(userObject, ['_id', 'email', 'name', 'surname', 'telefone', 'sexo']);
 };
 
-UserSchema.methods.removeToken = function(token) {
-  var user = this;
-
-  return user.update({
-    $pull:{
-      tokens: {token}
-    }
-  })
-}
-
 UserSchema.methods.generateAuthToken = function () {
   var user = this;
   var access = 'auth';
-  var token = jwt.sign({ _id: user._id.toHexString(), access }, '$lh71E0%A7&SA9-|NkEYXxYZOW06Kb@^63!p^D1M&*7!pTXTa7').toString();
+  var token = jwt.sign({ _id: user._id, access, exp: Date.now().toString() }, constants.jwt_key).toString();
 
-  user.tokens = user.tokens.concat([{ access, token }]);
-
-  return user.save().then(() => {
-    return token;
-  });
+  return token;
 }
 
 
@@ -151,24 +128,6 @@ UserSchema.statics.findByCredentials = function (email, password) {
         }
       })
     })
-  })
-}
-
-UserSchema.statics.findByToken = function (token) {
-  var User = this;
-  var decoded;
-
-  try {
-    decoded = jwt.verify(token, '$lh71E0%A7&SA9-|NkEYXxYZOW06Kb@^63!p^D1M&*7!pTXTa7');
-  }
-  catch (e) {
-    return Promise.reject();
-  }
-
-  return User.findOne({
-    _id: decoded._id,
-    'tokens.token': token,
-    'tokens.access': 'auth'
   })
 }
 
