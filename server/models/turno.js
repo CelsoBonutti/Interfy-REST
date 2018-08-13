@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const _ = require('lodash');
 
 let TurnoSchema = new mongoose.Schema({
     nome: {

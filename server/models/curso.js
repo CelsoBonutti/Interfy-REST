@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const _ = require('lodash');
 const { Intensidade } = require('./intensidade');
 
 let CursoSchema = new mongoose.Schema({

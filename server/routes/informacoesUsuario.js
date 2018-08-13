@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/authenticate');
 const _ = require('lodash');
-let { Informacoes } = require('../models/informacoesUsuario');
+const { Informacoes } = require('../models/informacoesUsuario');
 
 //Registra informações pessoais do usuário
 router.post('/me', authenticate, (req, res) => {

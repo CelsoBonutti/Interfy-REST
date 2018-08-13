@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const _ = require('lodash');
 const currencyConvert = require('currency-convert');
 
 let PaisSchema = new mongoose.Schema({

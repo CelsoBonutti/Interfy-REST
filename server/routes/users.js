@@ -3,11 +3,11 @@ const router = express.Router();
 const _ = require('lodash');
 const random = require('randomstring');
 const { ObjectID } = require('mongodb');
+const { authenticate } = require('../middleware/authenticate');
+const { User } = require('../models/user');
+const { createJWToken } = require('../libs/auth');
 
-let { authenticate } = require('../middleware/authenticate');
-let { User } = require('../models/user');
-let { createJWToken } = require('../libs/auth');
-
+//Registro de usuário
 router.post('/register', (req, res) => {
     let body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'telefone', 'genero']);
     let user = new User(body);
@@ -47,7 +47,6 @@ router.patch('/me', authenticate, (req, res) => {
 })
 
 //Exclusão de usuário
-
 router.delete('/me', authenticate, (req, res) => {
     let id = req.id;
 
@@ -88,6 +87,7 @@ router.get('/me', authenticate, (req, res) => {
     });
 })
 
+//Rota de ativação de e-mail
 router.get('/confirm/:id', (req, res) => {
     User.activateEmail(req.params.id).then(() => {
         res.status(200).send('Ativado');

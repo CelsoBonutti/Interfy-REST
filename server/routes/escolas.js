@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-let {
-    authenticate
-} = require('../middleware/authenticate');
-let {
-    Instituicao
-} = require('../models/escola');
+const { authenticate } = require('../middleware/authenticate');
+const { Instituicao } = require('../models/escola');
 
 router.get('/', (req, res) => {
     let filter = req.query;

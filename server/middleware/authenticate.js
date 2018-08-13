@@ -1,4 +1,3 @@
-const { constants } = require('../constants');
 const { verifyJWToken } = require('../libs/auth');
 
 let authenticate = (req, res, next) => {
