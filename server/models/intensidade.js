@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 const { Turno } = require('./turno')
 
-var IntensidadeSchema = new mongoose.Schema({
+let IntensidadeSchema = new mongoose.Schema({
     descricao: {
         type: String,
         required: true
@@ -13,7 +13,7 @@ var IntensidadeSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(instituicao){
-                var { Instituicao } = require('./escola');     
+                let { Instituicao } = require('./escola');     
                 return Instituicao.exists(instituicao);
             },
             message: 'Escola inexistente'
@@ -25,7 +25,7 @@ var IntensidadeSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(curso){
-                var { Curso } = require('./curso');
+                let { Curso } = require('./curso');
                 return Curso.exists(curso);
             },
             message: 'Curso inexistente'
@@ -34,7 +34,7 @@ var IntensidadeSchema = new mongoose.Schema({
 })
 
 IntensidadeSchema.methods.adicionarTurnos = function(turnos){
-    var cargaHoraria = this;
+    let cargaHoraria = this;
     _.concat(cargaHoraria.turno, turnos);
     return cargaHoraria.save().then(() =>{
         return 
@@ -46,7 +46,7 @@ IntensidadeSchema.methods.adicionarTurnos = function(turnos){
 }
 
 IntensidadeSchema.pre('remove', function(next){
-    var intensidade = this;
+    let intensidade = this;
     Turno.find({intensidade: intensidade._id}).then((turno)=>{
         turno.forEach(turno => {
             turno.remove();            
@@ -63,6 +63,6 @@ IntensidadeSchema.statics.exists = function(id){
     })
 }
 
-var Intensidade = mongoose.model('Intensidade', IntensidadeSchema);
+let Intensidade = mongoose.model('Intensidade', IntensidadeSchema);
 
 module.exports = { Intensidade };

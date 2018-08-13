@@ -4,7 +4,7 @@ const { Curso } = require('./curso');
 const { Intensidade } = require('./intensidade');
 const { Turno } = require('./turno');
 
-var InstituicaoSchema = new mongoose.Schema({
+let InstituicaoSchema = new mongoose.Schema({
     nome: {
         type: String,
         required: true,
@@ -49,7 +49,7 @@ var InstituicaoSchema = new mongoose.Schema({
 
 InstituicaoSchema.statics.findByFilter = function (filter) {
     Instituicao = this;
-    var filtroCidade;
+    let filtroCidade;
 
     if(filter.cidade){
         filtroCidade = {
@@ -65,7 +65,7 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
     return Instituicao.find(filtroCidade)
         .then((instituicao) =>{
             instituicaoId = _.map(instituicao, '_id');
-            var filtroCurso;
+            let filtroCurso;
             if(filter.curso){
                 filtroCurso = {
                     instituicao: {$in: instituicaoId},
@@ -80,7 +80,7 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
             return Curso.find(filtroCurso)
             .then((curso)=>{
                 cursoId = _.map(curso, '_id');
-                var filtroIntensidade;
+                let filtroIntensidade;
 
                 if(filter.intensidade){
                     filtroIntensidade = {
@@ -99,7 +99,7 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
                     .then((intensidade) =>{
                         intensidadeId = _.map(intensidade, '_id');
 
-                        var filtroTurno;
+                        let filtroTurno;
                         if(filter.turno){
                             filtroTurno = {
                                 instituicao: {$in: instituicaoId},
@@ -131,7 +131,7 @@ InstituicaoSchema.statics.findByFilter = function (filter) {
 }
 
 InstituicaoSchema.pre('remove', function(next){
-    var instituicao = this;
+    let instituicao = this;
     Curso.find({instituicao: instituicao._id}).then((curso)=>{
         curso.forEach(curso => {
             curso.remove();
@@ -148,6 +148,6 @@ InstituicaoSchema.statics.exists = function(id){
     })
 }
 
-var Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
+let Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
 
 module.exports = { Instituicao };

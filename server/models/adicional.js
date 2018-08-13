@@ -3,7 +3,7 @@ const validator = require('validator');
 const _ = require('lodash');
 
 
-var AdicionalSchema = new mongoose.Schema({
+let AdicionalSchema = new mongoose.Schema({
  descricao: {
     type: String,
     required: true
@@ -22,7 +22,7 @@ instituicao: {
     required: false,
     validate:{
     validator: function(instituicao){
-        var { Instituicao } = require('./escola');  
+        let { Instituicao } = require('./escola');  
         return Instituicao.exists(instituicao);
                 },
         message: 'Escola inexistente'
@@ -34,7 +34,7 @@ intercambio: {
         required: false,
         validate:{
                 validator: function(intercambio){
-                    var { Intercambio } = require('./intercambios');  
+                    let { Intercambio } = require('./intercambios');  
                         return Intercambio.exists(intercambio);
                     },
                     message: 'Intercambio inexistente'
@@ -49,6 +49,6 @@ AdicionalSchema.statics.exists = function(id){
     })
 }
 
-var Adicional = mongoose.model('Adicional', AdicionalSchema);
+let Adicional = mongoose.model('Adicional', AdicionalSchema);
 
 module.exports = { Adicional };

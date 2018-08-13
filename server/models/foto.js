@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-var FotoSchema = new mongoose.Schema({
+let FotoSchema = new mongoose.Schema({
     url_imagem: {
         type: String,
         required: true,
@@ -12,6 +12,6 @@ var FotoSchema = new mongoose.Schema({
     }
 })
 
-var Foto = mongoose.model('Foto', FotoSchema);
+let Foto = mongoose.model('Foto', FotoSchema);
 
 module.exports = { Foto };

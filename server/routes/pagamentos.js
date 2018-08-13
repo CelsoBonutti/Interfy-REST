@@ -5,7 +5,7 @@ const pagarme = require('pagarme');
 const { Intercambio } = require('../models/intercambios');
 
 router.post('/', (req, res) => {
-    var postSignature = req.header('X-Hub-Signature');
+    let postSignature = req.header('X-Hub-Signature');
     pagarme.verifySignature(process.env.API_KEY, req.body, postSignature).then((valido) => {
         if (valido) {
             Intercambio.find({transactionId: req.body.id}).then((intercambio)=>{

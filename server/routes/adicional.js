@@ -1,18 +1,27 @@
 const express = require('express');
 const router = express.Router();
-var { authenticateAdmin } = require('../middleware/authenticateAdmin');
+let {
+    authenticate
+} = require('../middleware/authenticate');
 const _ = require('lodash');
-var { Adicional } = require('../models/adicional');
+let {
+    Adicional
+} = require('../models/adicional');
 
-router.post('/adicional/register', authenticateAdmin, (req, res) => {
-    var body = _.pick(req.body, ['descricao', 'valor', 'instituicao', 'intercambio']);
-    var adicional = new Adicional(body);
+router.post('/adicional/register', authenticate, (req, res) => {
+    let body = _.pick(req.body, ['descricao', 'valor', 'instituicao', 'intercambio']);
+    let adicional = new Adicional(body);
 
-    adicional.save().then((adicional) => {
-        res.status(200).send(adicional);
-    }, (err) => {
-        res.status(400).send(err);
-    })
+    if (req.isAdmin) {
+        adicional.save().then((adicional) => {
+            res.status(200).send(adicional);
+        }, (err) => {
+            res.status(400).send(err);
+        })
+    }
+    else{
+        res.status(401).send('Usuário não autorizado.')
+    }
 })
 
 module.exports = router;

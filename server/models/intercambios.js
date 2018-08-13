@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const _ = require('lodash');
 
-var IntercambioSchema = new mongoose.Schema({
+let IntercambioSchema = new mongoose.Schema({
     curso: {
         tipo: {
             type: String,
@@ -80,13 +80,13 @@ IntercambioSchema.pre('validate', function(next){
 IntercambioSchema.post('save', function(next){
     intercambio = this;
     if (intercambio.status == 'paid'){
-        var { Transporter } = require('../db/nodemailer');
+        let { Transporter } = require('../libs/nodemailer');
         Transporter.sendSoldExchangeMail(intercambio).then(()=>{
             next();
         })
     }
     else if (intercambio.status == 'refused'){
-        var { Transporter } = require('../db/nodemailer');
+        let { Transporter } = require('../libs/nodemailer');
         Transporter.sendRefusedPaymentMail(intercambio).then(()=>{
             next();
         })
@@ -94,7 +94,7 @@ IntercambioSchema.post('save', function(next){
 })
 
 IntercambioSchema.virtual.valorTotal = function () {
-    var valor = this.curso.valor;
+    let valor = this.curso.valor;
     this.adicionais.foreach(adicional => {
         valor += adicionais.valor;
     });
@@ -102,7 +102,7 @@ IntercambioSchema.virtual.valorTotal = function () {
 }
 
 IntercambioSchema.statics.findByUserIdAndPopulate = function (_userId) {
-    var Intercambio = this;
+    let Intercambio = this;
 
     return Intercambio.find({ _userId }).then().populate({
         path: 'instituicao',
@@ -117,6 +117,6 @@ IntercambioSchema.statics.exists = function(id){
     })
 }
 
-var Intercambio = mongoose.model('Intercambio', IntercambioSchema);
+let Intercambio = mongoose.model('Intercambio', IntercambioSchema);
 
 module.exports = { Intercambio };

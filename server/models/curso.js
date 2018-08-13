@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 const { Intensidade } = require('./intensidade');
 
-var CursoSchema = new mongoose.Schema({
+let CursoSchema = new mongoose.Schema({
     titulo: {
         type: String,
         required: true,
@@ -18,7 +18,7 @@ var CursoSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(instituicao){
-                var { Instituicao } = require('./escola');  
+                let { Instituicao } = require('./escola');  
                 return Instituicao.exists(instituicao);
             },
             message: 'Escola inexistente'
@@ -27,7 +27,7 @@ var CursoSchema = new mongoose.Schema({
 })
 
 CursoSchema.pre('remove', function(next){
-    var curso = this;
+    let curso = this;
     Intensidade.find({curso: curso._id}).then((intensidade)=>{
         intensidade.forEach(intensidade=>{
             intensidade.remove();
@@ -44,6 +44,6 @@ CursoSchema.statics.exists = function(id){
     })
 }
 
-var Curso = mongoose.model('Curso', CursoSchema);
+let Curso = mongoose.model('Curso', CursoSchema);
 
 module.exports = { Curso };

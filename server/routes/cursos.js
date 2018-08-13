@@ -1,29 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-var { authenticateAdmin } = require('../middleware/authenticateAdmin');
-var { Curso } = require('../models/curso');
+let {
+    authenticate
+} = require('../middleware/authenticate');
+let {
+    Curso
+} = require('../models/curso');
 
 
-router.post('/register', authenticateAdmin, (req, res) => {
-    var curso = _.pick(req.body, ['cursos']).cursos;
+router.post('/register', authenticate, (req, res) => {
+    let curso = _.pick(req.body, ['cursos']).cursos;
 
-    Curso.create(curso).then((curso) => {
-        res.status(200).send(curso);
-    }, (e) => {
-        res.status(400).send(e);
-    })
-})
-
-router.delete('/:id', authenticateAdmin, (req, res) => {
-    var id = req.params.id;
-    Curso.findById(id).then((curso) => {
-        curso.remove().then((curso) => {
+    if (req.isAdmin) {
+        Curso.create(curso).then((curso) => {
             res.status(200).send(curso);
         }, (e) => {
             res.status(400).send(e);
         })
-    })
+    }
+})
+
+router.delete('/:id', authenticate, (req, res) => {
+    let id = req.params.id;
+
+    if (req.isAdmin) {
+        Curso.findById(id).then((curso) => {
+            curso.remove().then((curso) => {
+                res.status(200).send(curso);
+            }, (e) => {
+                res.status(400).send(e);
+            })
+        })
+    }
 })
 
 module.exports = router;

@@ -3,10 +3,9 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
-const randomstring = require('randomstring');
 const { constants } = require('../constants');
 
-var UserSchema = new mongoose.Schema({
+let UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -56,27 +55,31 @@ var UserSchema = new mongoose.Schema({
   verificationCode: {
     type: String,
     required: false
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false
   }
 });
 
 UserSchema.methods.toJSON = function () {
-  var user = this;
-  var userObject = user.toObject();
+  let user = this;
+  let userObject = user.toObject();
 
   return _.pick(userObject, ['_id', 'email', 'name', 'surname', 'telefone', 'sexo']);
 };
 
 UserSchema.methods.generateAuthToken = function () {
-  var user = this;
-  var access = 'auth';
-  var token = jwt.sign({ _id: user._id, access, exp: Date.now().toString() }, constants.jwt_key).toString();
+  let user = this;
+  let access = 'auth';
+  let token = jwt.sign({ _id: user._id, access, exp: Date.now().toString() }, constants.jwt_key).toString();
 
   return token;
 }
 
 
 UserSchema.pre('save', function (next) {
-  var user = this;
+  let user = this;
   user.wasNew = user.isNew;
 
   if (user.isModified('password')) {
@@ -93,16 +96,16 @@ UserSchema.pre('save', function (next) {
 })
 
 UserSchema.post('save', function(next){
-  var user = this;
+  let user = this;
   
   if(user.wasNew){
-    const { Transporter } = require('../db/nodemailer');
-
+    const { Transporter } = require('../libs/nodemailer');
+    Transporter.sendVerificationMail(user.email, user.verificationCode);
   }
 })
 
 UserSchema.statics.activateEmail = function(token){
-  var User = this;
+  let User = this;
 
   return User.findOne({verificationCode: token, active: false}).then((user)=>{
     user.active = true;
@@ -111,7 +114,7 @@ UserSchema.statics.activateEmail = function(token){
 }
 
 UserSchema.statics.findByCredentials = function (email, password) {
-  var User = this;
+  let User = this;
   
   return User.findOne({ email }).then((user) => {
     if (!user) {
@@ -131,6 +134,6 @@ UserSchema.statics.findByCredentials = function (email, password) {
   })
 }
 
-var User = mongoose.model('User', UserSchema);
+let User = mongoose.model('User', UserSchema);
 
 module.exports = { User }

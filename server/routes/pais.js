@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-var { Pais } = require('../models/pais');
-var { authenticateAdmin } = require('../middleware/authenticateAdmin');
+let {
+    Pais
+} = require('../models/pais');
+let {
+    authenticate
+} = require('../middleware/authenticate');
 
 //Retornar informações do país
 
@@ -15,15 +19,17 @@ router.get('/', (req, res) => {
 })
 
 //Registrar informações de países
-router.post('/register', authenticateAdmin, (req, res) => {
-    var body = _.pick(req.body, ['nome', 'sigla', 'capital', 'continente', 'linguas', 'moeda', 'descricao', 'vistos', 'clima', 'sugestao']);
-    var pais = new Pais(body);
+router.post('/register', authenticate, (req, res) => {
+    let body = _.pick(req.body, ['nome', 'sigla', 'capital', 'continente', 'linguas', 'moeda', 'descricao', 'vistos', 'clima', 'sugestao']);
+    let pais = new Pais(body);
 
-    pais.save().then((pais) => {
-        res.status(200).send(pais);
-    }, () => {
-        res.status(400).send();
-    })
+    if (req.isAdmin) {
+        pais.save().then((pais) => {
+            res.status(200).send(pais);
+        }, () => {
+            res.status(400).send();
+        })
+    }
 })
 
 module.exports = router;

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const _ = require('lodash');
 
-var TurnoSchema = new mongoose.Schema({
+let TurnoSchema = new mongoose.Schema({
     nome: {
         type: String,
         required: true
@@ -37,7 +37,7 @@ var TurnoSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(instituicao){
-                var { Instituicao } = require('./escola');
+                let { Instituicao } = require('./escola');
                 return Instituicao.exists(instituicao);
             },
             message: 'A escola que está tentando ser registrada não existe.'
@@ -49,7 +49,7 @@ var TurnoSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(intensidade){
-                var { Intensidade } = require('./intensidade');
+                let { Intensidade } = require('./intensidade');
                 return Intensidade.exists(intensidade);
             },
             message: 'Intensidade inexistente'
@@ -57,6 +57,6 @@ var TurnoSchema = new mongoose.Schema({
     }
 })
 
-var Turno = mongoose.model('Turno', TurnoSchema);
+let Turno = mongoose.model('Turno', TurnoSchema);
 
 module.exports = { Turno };

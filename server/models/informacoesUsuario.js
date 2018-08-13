@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-var InformacoesSchema = new mongoose.Schema({
+let InformacoesSchema = new mongoose.Schema({
     dataNascimento: {
         type: Date,
         required: true
@@ -73,7 +73,7 @@ var InformacoesSchema = new mongoose.Schema({
 })
 
 InformacoesSchema.statics.findByUserId = function (_userId) {
-    var Informacoes = this;
+    let Informacoes = this;
 
     return Informacoes.findOne({_userId}).then((informacoes) => {
         if(!informacoes){
@@ -83,6 +83,6 @@ InformacoesSchema.statics.findByUserId = function (_userId) {
     })
 }
 
-var Informacoes = mongoose.model('Informacoes', InformacoesSchema);
+let Informacoes = mongoose.model('Informacoes', InformacoesSchema);
 
 module.exports = { Informacoes }

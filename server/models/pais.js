@@ -3,7 +3,7 @@ const validator = require('validator');
 const _ = require('lodash');
 const currencyConvert = require('currency-convert');
 
-var PaisSchema = new mongoose.Schema({
+let PaisSchema = new mongoose.Schema({
     nome: {
         type: String,
         required: true
@@ -96,6 +96,6 @@ PaisSchema.virtual('converteMoeda').get = function () {
     })
 }
 
-var Pais = mongoose.model('Pais', PaisSchema);
+let Pais = mongoose.model('Pais', PaisSchema);
 
 module.exports = { Pais };

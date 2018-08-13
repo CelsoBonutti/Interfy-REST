@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/authenticate');
 const _ = require('lodash');
-var { Informacoes } = require('../models/informacoesUsuario');
+let { Informacoes } = require('../models/informacoesUsuario');
 
 //Registra informações pessoais do usuário
 router.post('/me', authenticate, (req, res) => {
-    var body = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
-    var informacoes = new Informacoes(body);
+    let body = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
+    let informacoes = new Informacoes(body);
 
     informacoes.save().then((informacoes) => {
         res.status(200).send(informacoes)
@@ -27,8 +27,8 @@ router.get('/me', authenticate, (req, res) => {
 
 //Atualiza registro de informações pessoais do usuário
 router.patch('/me', authenticate, (req, res) => {
-    var id = req.user._id;
-    var novasInformacoes = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
+    let id = req.user._id;
+    let novasInformacoes = _.pick(req.body, ['dataNascimento', 'cpf', 'nivel', 'endereco', 'informacoesMedicas', 'contatosSeguranca']);
 
     if (!ObjectID.isValid(id)) {
         return res.status(404).send();
