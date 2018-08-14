@@ -80,4 +80,11 @@ router.delete('/:id', authenticate, (req, res) => {
     }
 })
 
+router.get('/todas', (req, res) => {
+    Instituicao.find().then((resultados) =>{
+      res.status(200).send(resultados);
+    },(e) =>{
+      res.status(400).send(e);
+    })
+  })
 module.exports = router;
