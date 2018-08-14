@@ -55,10 +55,16 @@ router.get('/', (req, res) => {
 
 //Rotas de registro de escolas
 
-router.post('/register', authenticate, (req, res) => {
-    let escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'fotos', 'diferenciais', 'comentarios', 'infraestrutura', 'atividadesExtra']);
-
-    if (req.isAdmin) {
+router.post('/register', /*authenticate,*/ (req, res) => {
+    let escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'comentarios', 'infraestrutura', 'atividadesExtra']);
+let diferenciais = new Array();
+//salvando o nome das imagens
+diferenciais.icone = req.files.icone.originalFilename;
+escola.fotos = req.files.arquivo.originalFilename;
+//colocando os diferencias em um vetor
+diferenciais.descricao = req.descricao;
+escola.diferenciais = diferenciais;
+    if(req.isAdmin){
         Instituicao.create(escola).then((escola) => {
             res.status(200).send(escola);
         }, (e) => {

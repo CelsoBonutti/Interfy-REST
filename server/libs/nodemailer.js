@@ -6,7 +6,7 @@ let Transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: process.env.MAIL_USR,
-        pass: process.env.MAIL_PWD
+        pass: process.env.MAIL_PWD 
     }
 })
 
