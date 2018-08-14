@@ -55,7 +55,7 @@ router.get('/', (req, res) => {
 
 //Rotas de registro de escolas
 
-router.post('/register', /*authenticate,*/ (req, res) => {
+router.post('/register', authenticate, (req, res) => {
     let escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'comentarios', 'infraestrutura', 'atividadesExtra']);
 let diferenciais = new Array();
 //salvando o nome das imagens
