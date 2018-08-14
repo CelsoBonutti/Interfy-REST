@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-let {
-    Turno
-} = require('../models/turno');
-let {
-    authenticate
-} = require('../middleware/authenticate');
+const { Turno } = require('../models/turno');
+const { authenticate } = require('../middleware/authenticate');
 
 router.post('/register', authenticate, (req, res) => {
     if (req.isAdmin) {

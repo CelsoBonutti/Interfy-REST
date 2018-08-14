@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
-let {
-    authenticate
-} = require('../middleware/authenticate');
 const _ = require('lodash');
-let {
-    Adicional
-} = require('../models/adicional');
+const { authenticate } = require('../middleware/authenticate');
+const { Adicional } = require('../models/adicional');
 
 router.post('/adicional/register', authenticate, (req, res) => {
     let body = _.pick(req.body, ['descricao', 'valor', 'instituicao', 'intercambio']);

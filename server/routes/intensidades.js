@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-let {
-    authenticate
-} = require('../middleware/authenticate');
-let {
-    Intensidade
-} = require('../models/intensidade');
+const { authenticate } = require('../middleware/authenticate');
+const { Intensidade } = require('../models/intensidade');
 
 
 router.post('/register', authenticate, (req, res) => {

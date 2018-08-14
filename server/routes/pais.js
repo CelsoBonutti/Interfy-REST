@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-let {
-    Pais
-} = require('../models/pais');
-let {
-    authenticate
-} = require('../middleware/authenticate');
+const { Pais } = require('../models/pais');
+const { authenticate } = require('../middleware/authenticate');
 
 //Retornar informações do país
 
