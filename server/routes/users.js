@@ -96,12 +96,4 @@ router.get('/confirm/:id', (req, res) => {
     })
 })
 
-router.get('/all', (req, res) => {
-    User.find().then((user) =>{
-      res.status(200).send(user);
-    },(e) =>{
-      res.status(400).send(e);
-    })
-  })
-  
 module.exports = router;
