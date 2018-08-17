@@ -56,21 +56,34 @@ router.get('/', (req, res) => {
 //Rotas de registro de escolas
 
 router.post('/register', authenticate, (req, res) => {
-    let escola = _.pick(req.body, ['nome', 'pais', 'cidade', 'comentarios', 'infraestrutura', 'atividadesExtra']);
-let diferenciais = new Array();
-//salvando o nome das imagens
-diferenciais.icone = req.files.icone.originalFilename;
-escola.fotos = req.files.arquivo.originalFilename;
-//colocando os diferencias em um vetor
-diferenciais.descricao = req.descricao;
-escola.diferenciais = diferenciais;
-    if(req.isAdmin){
-        Instituicao.create(escola).then((escola) => {
-            res.status(200).send(escola);
+    let escola = _.pick(req.body, ['nome', 'pais', 'cidade','diferenciais', 'comentarios','infraestrutura', 'atividadesExtra']);
+   
+    escola.diferenciais =[];
+    escola.diferenciais.push({'descricao':_.pick(req.body,['descricao']).descricao});
+
+    let foto = req.files.arquivo.path;
+    let arquivo = req.files.icone.path;
+
+    Instituicao.upload(foto).then((resultado) => {
+        escola.fotos = resultado.public_id;
+  
+    Instituicao.upload(arquivo).then((resultado) => {
+    escola.diferenciais.push({'icone':resultado.public_id})
+        if(req.isAdmin){                                                                                                    
+            Instituicao.create(escola).then((escola) => {
+                res.status(200).send(escola);
+            }, (e) => {
+                res.status(400).send(e);
+            })
+        }else{
+            res.status(400).json({message:"você não é adm"});
+        }
         }, (e) => {
-            res.status(400).send(e);
+            res.status(400).json({message: e});
         })
-    }
+    }, (e) => {
+        res.status(400).json({message: e});
+    })
 })
 
 router.delete('/:id', authenticate, (req, res) => {
@@ -93,5 +106,5 @@ router.get('/todas', (req, res) => {
       res.status(400).send(e);
     })
   })
-  
+
 module.exports = router;

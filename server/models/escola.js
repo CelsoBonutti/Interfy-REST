@@ -30,11 +30,11 @@ let InstituicaoSchema = new mongoose.Schema({
     diferenciais: [{
         descricao: {
             type: String,
-            required: true
+           // required: true
         },
         icone: {
             type: String,
-            required: true
+            //required: true
         }
     }],
     infraestrutura: [{
@@ -147,6 +147,19 @@ InstituicaoSchema.statics.exists = function(id){
         return (count>0);
     })
 }
+
+InstituicaoSchema.statics.upload = function(arquivo){
+    console.log('passou upload')
+    var cloudinary = require('cloudinary');
+    cloudinary.config({ 
+        cloud_name: 'hudson', 
+        api_key: '544923467984711', 
+        api_secret: 'MoYAHfJitgonAeYj9meq-62UUQc' 
+      });
+
+     return cloudinary.uploader.upload ( arquivo, function (result) {
+      });
+  }
 
 let Instituicao = mongoose.model('Instituicao', InstituicaoSchema);
 

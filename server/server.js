@@ -13,6 +13,7 @@ if (env === 'development') {
 //Bibliotecas
 let multiparty = require('connect-multiparty');
 const bodyParser = require('body-parser');
+var cloudinary = require('cloudinary');
 const express = require('express');
 const _ = require('lodash');
 let fs = require('fs');
@@ -30,7 +31,7 @@ const rotasUsuarios = require('./routes/users');
 const { mongoose } = require('./libs/mongoose');
 
 //Models
-let { Foto } = require('./models/foto');
+
 
 //Configuração dos pacotes
 let app = express();
@@ -40,8 +41,8 @@ app.use(multiparty());
 
 //Setando CORS
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,Authorization,x-auth");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Origin", "*");
   next();
