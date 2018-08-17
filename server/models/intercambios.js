@@ -49,11 +49,7 @@ let IntercambioSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        validate:{
-            validator: function(status){
-                return (validator.isIn(status, ['processing', 'authorized', 'paid', 'refunded', 'waiting_payment', 'pending_refund', 'refused', 'chargedback']));
-            }
-        }
+        enum: ['processing', 'authorized', 'paid', 'refunded', 'waiting_payment', 'pending_refund', 'refused', 'chargedback']
     },
     dataDeCompra:{
         type: Date,

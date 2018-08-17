@@ -27,6 +27,8 @@ const rotasPagamentos = require('./routes/pagamentos');
 const rotasPaises = require('./routes/pais');
 const rotasTurnos = require('./routes/turnos');
 const rotasUsuarios = require('./routes/users');
+const graphqlHTTP = require('express-graphql');
+
 const { mongoose } = require('./libs/mongoose');
 
 //Models
@@ -58,10 +60,10 @@ app.use('/pagamentos', rotasPagamentos);
 app.use('/paises', rotasPaises);
 app.use('/turnos', rotasTurnos);
 app.use('/users', rotasUsuarios);
+app.use('/graphql', graphqlHTTP({}));
 
 // Path da pasta pública que armazenará as fotos.
 let path_public = __dirname + '/public';
-
 
 app.use(express.static(path_public));
 

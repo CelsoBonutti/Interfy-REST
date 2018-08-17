@@ -36,13 +36,8 @@ let UserSchema = new mongoose.Schema({
   },
   genero:{
     type: String,
+    enum: ['M', 'F', 'O', 'N'],
     required: true,
-    validate:{
-      validator: function(sexo){
-        return validator.isIn(sexo, ['M', 'F', 'O', 'N'])
-      },
-      message: '{VALUE} não é um valor de sexo válido.'
-    },
     maxlength: 1,
     minlength: 1
   },
