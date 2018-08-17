@@ -7,6 +7,10 @@ let IntensidadeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
     instituicao: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Instituicao',

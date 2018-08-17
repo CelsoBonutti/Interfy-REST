@@ -30,11 +30,11 @@ let InstituicaoSchema = new mongoose.Schema({
     diferenciais: [{
         descricao: {
             type: String,
-           // required: true
+            required: true
         },
         icone: {
             type: String,
-            //required: true
+            required: true
         }
     }],
     infraestrutura: [{

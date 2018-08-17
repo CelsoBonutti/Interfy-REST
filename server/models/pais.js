@@ -94,6 +94,13 @@ PaisSchema.virtual('converteMoeda').get = function () {
     })
 }
 
+PaisSchema.statics.exists = function(id){
+    Pais = this;
+    return Pais.count({_id: id}).then((count) =>{
+        return (count>0);
+    })
+}
+
 let Pais = mongoose.model('Pais', PaisSchema);
 
 module.exports = { Pais };

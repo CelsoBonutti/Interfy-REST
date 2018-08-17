@@ -15,13 +15,17 @@ let AdicionalSchema = new mongoose.Schema({
             message: '{VALUE} não é um valor válido.'
         }
     },
+    obrigatorio: {
+        type: Boolean,
+        required: true
+    },
     instituicao: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Instituicao',
         required: false,
         validate: {
             validator: function (instituicao) {
-                let {
+                const {
                     Instituicao
                 } = require('./escola');
                 return Instituicao.exists(instituicao);
@@ -29,18 +33,18 @@ let AdicionalSchema = new mongoose.Schema({
             message: 'Escola inexistente'
         }
     },
-    intercambio: {
+    pais: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Intercambio',
+        ref: 'Pais',
         required: false,
         validate: {
-            validator: function (intercambio) {
-                let {
-                    Intercambio
-                } = require('./intercambios');
-                return Intercambio.exists(intercambio);
+            validator: function (pais) {
+                const {
+                    Pais
+                } = require('./pais');
+                return Pais.exists(pais);
             },
-            message: 'Intercambio inexistente'
+            message: 'País inexistente'
         }
     }
 })
