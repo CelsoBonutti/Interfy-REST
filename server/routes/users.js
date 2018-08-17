@@ -9,7 +9,7 @@ const { createJWToken } = require('../libs/auth');
 
 //Registro de usuário
 router.post('/register', (req, res) => {
-    let body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'telefone', 'genero','isAdmin']);
+    let body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'telefone', 'genero']);
     let user = new User(body);
     user.verificationCode = random.generate();
     user.active = false;
