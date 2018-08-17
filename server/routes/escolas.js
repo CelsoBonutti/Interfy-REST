@@ -76,7 +76,7 @@ router.post('/register', authenticate, (req, res) => {
                 res.status(400).send(e);
             })
         }else{
-            res.status(400).json({message:"você não é adm"});
+            res.status(401).json({message:"você não é adm"});
         }
         }, (e) => {
             res.status(400).json({message: e});
