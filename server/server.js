@@ -8,6 +8,9 @@ if (env === 'development') {
   process.env.MONGO_STR = 'mongodb://localhost:27017/dev';
   process.env.JWT_SECRET = 'segredomuitosecreto';
   process.env.URL = 'http://localhost:8000';
+  process.env.CLOUD_NAME = '';
+  process.env.CLOUR_KEY = '';
+  process.env.CLOUR_SECRET = '';
 }
 
 //Bibliotecas

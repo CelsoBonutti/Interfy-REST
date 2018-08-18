@@ -60,29 +60,23 @@ router.post('/register', authenticate, (req, res) => {
    
     escola.diferenciais =[];
     escola.diferenciais.push({'descricao':_.pick(req.body,['descricao']).descricao});
+    escola.diferenciais.push({'icone':_.pick(req.body,['icone']).icone})
 
     let foto = req.files.arquivo.path;
-    let arquivo = req.files.icone.path;
-
+    
     Instituicao.upload(foto).then((resultado) => {
         escola.fotos = resultado.public_id;
-  
-    Instituicao.upload(arquivo).then((resultado) => {
-    escola.diferenciais.push({'icone':resultado.public_id})
-        if(req.isAdmin){                                                                                                    
-            Instituicao.create(escola).then((escola) => {
-                res.status(200).send(escola);
-            }, (e) => {
-                res.status(400).send(e);
-            })
-        }else{
-            res.status(400).json({message:"você não é adm"});
-        }
+            if(req.isAdmin){                                                                                                    
+                Instituicao.create(escola).then((escola) => {
+                    res.status(200).send(escola);
+                }, (e) => {
+                    res.status(400).send(e);
+                })
+            }else{
+                res.status(401).json({message:"você não é adm"});
+                }
         }, (e) => {
             res.status(400).json({message: e});
-        })
-    }, (e) => {
-        res.status(400).json({message: e});
     })
 })
 

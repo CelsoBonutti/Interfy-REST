@@ -155,9 +155,9 @@ InstituicaoSchema.statics.upload = function(arquivo){
     console.log('passou upload')
     var cloudinary = require('cloudinary');
     cloudinary.config({ 
-        cloud_name: 'hudson', 
-        api_key: '544923467984711', 
-        api_secret: 'MoYAHfJitgonAeYj9meq-62UUQc' 
+        cloud_name: process.env.CLOUD_NAME , 
+        api_key: process.env.CLOUR_KEY, 
+        api_secret: process.env.CLOUR_SECRET 
       });
 
      return cloudinary.uploader.upload ( arquivo, function (result) {
