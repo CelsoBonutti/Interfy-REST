@@ -1,6 +1,18 @@
 const mongoose = require('mongoose');
 const currencyConvert = require('currency-convert');
 
+let CurrencySchema = new mongoose.Schema({
+    code: {
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 3
+    },
+    name: {
+        type: String,
+    }
+})
+
 let PaisSchema = new mongoose.Schema({
     nome: {
         type: String,
@@ -25,16 +37,10 @@ let PaisSchema = new mongoose.Schema({
         required: true
     }],
     moeda: {
-        codigo: {
-            type: String,
-            required: true,
-            minlength: 3,
-            maxlength: 3
-        },
-        nome: {
-            type: String,
-            required: true
-        }
+        type: String,
+        required: true,
+        minlength: 3,
+        maxlength: 3
     },
     descricao: {
         type: String,
@@ -53,31 +59,31 @@ let PaisSchema = new mongoose.Schema({
         }
     }],
     clima: [{
-            nome: {
-                type: String,
+        nome: {
+            type: String,
+            required: true
+        },
+        temporada: {
+            type: String,
+            required: true
+        },
+        meses: {
+            type: String,
+            required: true
+        },
+        tempo: {
+            type: String,
+            required: true
+        },
+        temperatura: {
+            minima: {
+                type: Number,
                 required: true
             },
-            temporada: {
-                type: String,
+            maxima: {
+                type: Number,
                 required: true
-            },
-            meses: {
-                type: String,
-                required: true
-            },
-            tempo: {
-                type: String,
-                required: true
-            },
-            temperatura: {
-                minima:{
-                    type: Number,
-                    required: true
-                },
-                maxima:{
-                    type: Number,
-                    required: true
-                }
+            }
         }
     }],
     sugestao: {
@@ -94,13 +100,17 @@ PaisSchema.virtual('converteMoeda').get = function () {
     })
 }
 
-PaisSchema.statics.exists = function(id){
+PaisSchema.statics.exists = function (id) {
     Pais = this;
-    return Pais.count({_id: id}).then((count) =>{
-        return (count>0);
+    return Pais.count({
+        _id: id
+    }).then((count) => {
+        return (count > 0);
     })
 }
 
 let Pais = mongoose.model('Pais', PaisSchema);
 
-module.exports = { Pais };
+module.exports = {
+    Pais
+};

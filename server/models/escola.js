@@ -4,6 +4,17 @@ const { Curso } = require('./curso');
 const { Intensidade } = require('./intensidade');
 const { Turno } = require('./turno');
 
+let DiferencialSchema = new mongoose.Schema({
+    descricao: {
+        type: String,
+        required: true
+    },
+    icone: {
+        type: String,
+        required: true
+    }
+})
+
 let InstituicaoSchema = new mongoose.Schema({
     nome: {
         type: String,
@@ -13,9 +24,7 @@ let InstituicaoSchema = new mongoose.Schema({
         unique: false,
     },
     pais: {
-        type: String,
-        minlength: 2,
-        maxlength: 2,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     cidade: {
@@ -27,16 +36,10 @@ let InstituicaoSchema = new mongoose.Schema({
         type: [String],
         required: true,
     },
-    diferenciais: [{
-        descricao: {
-            type: String,
-            required: true
-        },
-        icone: {
-            type: String,
-            required: true
-        }
-    }],
+    diferenciais: {
+        type: [DiferencialSchema],
+        required: true
+    },
     infraestrutura: [{
         type: String,
         required: true

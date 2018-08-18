@@ -12,7 +12,6 @@ if (env === 'development') {
 
 //Bibliotecas
 const bodyParser = require('body-parser');
-var cloudinary = require('cloudinary');
 const express = require('express');
 const _ = require('lodash');
 const port = process.env.PORT;

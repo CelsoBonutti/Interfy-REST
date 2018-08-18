@@ -7,7 +7,7 @@ let IntensidadeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    title: {
+    nome: {
         type: String,
         required: true
     },

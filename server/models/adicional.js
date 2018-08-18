@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-
 let AdicionalSchema = new mongoose.Schema({
     descricao: {
         type: String,
@@ -9,29 +8,42 @@ let AdicionalSchema = new mongoose.Schema({
     },
     valor: {
         type: Number,
-        required: true,
         validate: {
             validator: validator.isCurrency,
             message: '{VALUE} não é um valor válido.'
-        }
+        },
+        required: true
     },
-    obrigatorio: {
+    required: {
         type: Boolean,
         required: true
+    },
+    type:{
+        type: String,
+        enum: ['visa', 'material', 'insurance'],
+        required: true
+    },
+    coverage:{
+        type: Number,
+        validate: {
+            validator: validator.isCurrency,
+            message: '{VALUE} não é um valor válido'
+        },
+        required: function(){
+            return this.tipo === 'insurance'
+        }
     },
     instituicao: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Instituicao',
-        required: false,
         validate: {
             validator: function (instituicao) {
-                const {
-                    Instituicao
-                } = require('./escola');
+                const {Instituicao} = require('./escola');
                 return Instituicao.exists(instituicao);
             },
             message: 'Escola inexistente'
-        }
+        },
+        required: false
     },
     pais: {
         type: mongoose.Schema.Types.ObjectId,
@@ -39,9 +51,7 @@ let AdicionalSchema = new mongoose.Schema({
         required: false,
         validate: {
             validator: function (pais) {
-                const {
-                    Pais
-                } = require('./pais');
+                const {Pais} = require('./pais');
                 return Pais.exists(pais);
             },
             message: 'País inexistente'
