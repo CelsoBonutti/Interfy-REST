@@ -15,13 +15,14 @@ if (env === 'development') {
 
 //Bibliotecas
 const bodyParser = require('body-parser');
-var cloudinary = require('cloudinary');
+const cloudinary = require('cloudinary');
 const express = require('express');
 const _ = require('lodash');
 const port = process.env.PORT;
 const rotasAdicionais = require('./routes/adicional');
 const rotasCursos = require('./routes/cursos');
 const rotasEscolas = require('./routes/escolas');
+const morgan = require('morgan');
 const rotasInformacoes = require('./routes/informacoesUsuario');
 const rotasIntensidades = require('./routes/intensidades');
 const rotasIntercambios = require('./routes/intercambios');
@@ -31,6 +32,9 @@ const rotasTurnos = require('./routes/turnos');
 const rotasUsuarios = require('./routes/users');
 const graphqlHTTP = require('express-graphql');
 const { mongoose } = require('./libs/mongoose');
+const winstonErro = require('./libs/winston').logger;
+const winstonInfo = require('./libs/winston').logger1;
+const winstonsilly = require('./libs/winston').logger2;
 
 //Configuração dos pacotes
 let app = express();
@@ -47,6 +51,9 @@ app.use(function (req, res, next) {
 });
 
 //Configuração das rotas
+app.use(morgan('combined', { stream: winstonInfo.stream }));
+app.use(morgan('combined', { stream: winstonErro.stream }));
+app.use(morgan('combined', { stream: winstonsilly.stream }));
 app.use('/adicionais', rotasAdicionais);
 app.use('/cursos', rotasCursos);
 app.use('/escolas', rotasEscolas);
