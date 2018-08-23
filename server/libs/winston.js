@@ -22,7 +22,7 @@ var logger = winston.createLogger({
   exitOnError: false,
 });
 logger.level= 'error';
-logger.error('Deu  Merda',{color: 'red' });
+
 
 var logger1 = winston.createLogger({
   levels: winston.config.syslog.levels,
@@ -41,7 +41,7 @@ var logger1 = winston.createLogger({
   exitOnError: false,
 });
 logger1.level= 'info';
-logger1.info('Informação',{color: 'red' });
+
 
 var logger2 = winston.createLogger({
   levels: winston.config.syslog.levels,

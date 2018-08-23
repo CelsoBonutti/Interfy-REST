@@ -3,7 +3,8 @@ const router = express.Router();
 const _ = require('lodash');
 const { authenticate } = require('../middleware/authenticate');
 const { Instituicao } = require('../models/escola');
-
+const fs = require('fs');
+var appRoot = require('app-root-path');
 router.get('/', (req, res) => {
     let filter = req.query;
     Instituicao.findByFilter(filter).then((turnos) => {
@@ -94,9 +95,15 @@ router.delete('/:id', authenticate, (req, res) => {
 })
 
 router.get('/todas', (req, res) => {
-    Instituicao.find().then((resultados) =>{
-      res.status(200).send(resultados);
+    Instituicao.find().then((resultados) =>{     
+        res.status(200).send(resultados);
     },(e) =>{
+        now = new Date
+        fs.writeFile(`${appRoot}/logs/somenteErr.log`, e+'data: ' + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + ":" + now.getMilliseconds() +'rota: '+req.baseUrl+'-'+req.url+'-'+req.hostname+'\n',{enconding:'utf-8',flag: 'a'}, function (err) {
+            if (err){
+                throw err;
+            }   
+        });
       res.status(400).send(e);
     })
   })

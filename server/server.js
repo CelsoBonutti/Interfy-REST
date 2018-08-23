@@ -66,6 +66,7 @@ app.use('/turnos', rotasTurnos);
 app.use('/users', rotasUsuarios);
 app.use('/graphql', graphqlHTTP({}));
 
+
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 })
