@@ -1,5 +1,5 @@
 //Configuração das variáveis de ambiente
-let env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
 
 console.log('env *****', env);
 
@@ -16,29 +16,30 @@ if (env === 'development') {
 //Bibliotecas
 const bodyParser = require('body-parser');
 const express = require('express');
-const _ = require('lodash');
 const port = process.env.PORT;
-const rotasAdicionais = require('./routes/adicional');
-const rotasCursos = require('./routes/cursos');
-const rotasEscolas = require('./routes/escolas');
-const rotasInformacoes = require('./routes/informacoesUsuario');
-const rotasIntensidades = require('./routes/intensidades');
-const rotasIntercambios = require('./routes/intercambios');
-const rotasPagamentos = require('./routes/pagamentos');
-const rotasPaises = require('./routes/pais');
-const rotasTurnos = require('./routes/turnos');
-const rotasUsuarios = require('./routes/users');
+const addonRoutes = require('./routes/addons');
+const courseRoutes = require('./routes/courses');
+const schoolRoutes = require('./routes/schools');
+const informationRoutes = require('./routes/userInfo');
+const intensityRoutes = require('./routes/intensities');
+const exchangeRoutes = require('./routes/exchanges');
+const paymentRoutes = require('./routes/payments');
+const countryRoutes = require('./routes/countries');
+const shiftRoutes = require('./routes/shifts');
+const userRoutes = require('./routes/users');
 const graphqlHTTP = require('express-graphql');
 const { mongoose } = require('./libs/mongoose');
 
+//Configuração do GraphQL
+
 //Configuração dos pacotes
-let app = express();
+const app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //Setando CORS
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,Authorization,x-auth");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-auth, X-Hub-Signature");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,PATCH,OPTIONS");
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Origin", "*");
@@ -46,16 +47,16 @@ app.use(function (req, res, next) {
 });
 
 //Configuração das rotas
-app.use('/adicionais', rotasAdicionais);
-app.use('/cursos', rotasCursos);
-app.use('/escolas', rotasEscolas);
-app.use('/infos', rotasInformacoes);
-app.use('/intensidades', rotasIntensidades);
-app.use('/intercambios', rotasIntercambios);
-app.use('/pagamentos', rotasPagamentos);
-app.use('/paises', rotasPaises);
-app.use('/turnos', rotasTurnos);
-app.use('/users', rotasUsuarios);
+app.use('/addons', addonRoutes);
+app.use('/courses', courseRoutes);
+app.use('/schools', schoolRoutes);
+app.use('/userInfo', informationRoutes);
+app.use('/intensities', intensityRoutes);
+app.use('/exchanges', exchangeRoutes);
+app.use('/pagamentos', paymentRoutes);
+app.use('/countries', countryRoutes);
+app.use('/shifts', shiftRoutes);
+app.use('/users', userRoutes);
 app.use('/graphql', graphqlHTTP({}));
 
 app.listen(port, () => {

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-let IntercambioSchema = new mongoose.Schema({
-    curso: {
+let ExchangeSchema = new mongoose.Schema({
+    course: {
         tipo: {
             type: String,
             required: true
@@ -27,21 +27,23 @@ let IntercambioSchema = new mongoose.Schema({
             type: Date,
             required: true
         },
-        instituicao: {
+        school: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Instituicao',
+            ref: 'School',
             required: true
         },
         valor: {
-            type: Number,
+            type: String,
             validate: {
-                validator: validator.isCurrency,
+                validator: function(){
+                    return validator.isCurrency(this.price);
+                },
                 message: '{VALUE} não é um valor válido.'
             },
             required: true
         }
     },
-    _userId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
@@ -51,10 +53,14 @@ let IntercambioSchema = new mongoose.Schema({
         required: true,
         enum: ['processing', 'authorized', 'paid', 'refunded', 'waiting_payment', 'pending_refund', 'refused', 'chargedback']
     },
-    dataDeCompra:{
+    purchaseDate:{
         type: Date,
         required: true,
         default: Date.now
+    },
+    updateDate:{
+        type: Date,
+        required: true
     },
     transactionId:{
         type: Number,
@@ -62,56 +68,42 @@ let IntercambioSchema = new mongoose.Schema({
     }
 })
 
-IntercambioSchema.pre('validate', function(next){
-    intercambio = this;
-    if(intercambio.isNew){
-        intercambio.dataDeCompra = Date.now;
-        intercambio.status = 'processing';
+ExchangeSchema.pre('validate', function(next){
+    exchange = this;
+    if(exchange.isNew){
+        exchange.dataDeCompra = Date.now;
+        exchange.status = 'processing';
         next();
     }
+    updateDate = Date.now;
     next();
 })
 
-IntercambioSchema.post('save', function(next){
-    intercambio = this;
-    if (intercambio.status == 'paid'){
+ExchangeSchema.post('save', function(next){
+    exchange = this;
+    if (exchange.status == 'paid'){
         let { Transporter } = require('../libs/nodemailer');
-        Transporter.sendSoldExchangeMail(intercambio).then(()=>{
+        Transporter.sendSoldExchangeMail(exchange).then(()=>{
             next();
         })
     }
-    else if (intercambio.status == 'refused'){
+    else if (exchange.status == 'refused'){
         let { Transporter } = require('../libs/nodemailer');
-        Transporter.sendRefusedPaymentMail(intercambio).then(()=>{
+        Transporter.sendRefusedPaymentMail(exchange).then(()=>{
             next();
         })
     }
 })
 
-IntercambioSchema.virtual.valorTotal = function () {
-    let valor = this.curso.valor;
-    this.adicionais.foreach(adicional => {
-        valor += adicionais.valor;
-    });
-    return valor;
-}
+ExchangeSchema.statics.findByUserIdAndPopulate = function (userId) {
+    let Exchange = this;
 
-IntercambioSchema.statics.findByUserIdAndPopulate = function (_userId) {
-    let Intercambio = this;
-
-    return Intercambio.find({ _userId }).then().populate({
-        path: 'instituicao',
+    return Exchange.find({ userId }).then().populate({
+        path: 'School',
         select: 'nome'
     })
 }
 
-IntercambioSchema.statics.exists = function(id){
-    Intercambio = this;
-    return Intercambio.count({_id: id}).then((count)=>{
-        return (count>0);
-    })
-}
+let Exchange = mongoose.model('Exchange', ExchangeSchema);
 
-let Intercambio = mongoose.model('Intercambio', IntercambioSchema);
-
-module.exports = { Intercambio };
+module.exports = { Exchange };

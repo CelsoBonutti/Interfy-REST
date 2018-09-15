@@ -2,18 +2,21 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const { authenticate } = require('../middleware/authenticate');
-const { Curso } = require('../models/curso');
+const { Course } = require('../models/course');
 
 
 router.post('/register', authenticate, (req, res) => {
-    let curso = _.pick(req.body, ['cursos']).cursos;
+    let course = _.pick(req.body, ['courses']).courses;
 
     if (req.isAdmin) {
-        Curso.create(curso).then((curso) => {
-            res.status(200).send(curso);
+        Course.create(course).then((course) => {
+            res.status(200).send(course);
         }, (e) => {
             res.status(400).send(e);
         })
+    }
+    else{
+        res.status(404).send();
     }
 })
 
@@ -21,13 +24,16 @@ router.delete('/:id', authenticate, (req, res) => {
     let id = req.params.id;
 
     if (req.isAdmin) {
-        Curso.findById(id).then((curso) => {
-            curso.remove().then((curso) => {
-                res.status(200).send(curso);
+        Course.findById(id).then((course) => {
+            course.remove().then((course) => {
+                res.status(200).send(course);
             }, (e) => {
                 res.status(400).send(e);
             })
         })
+    }
+    else{
+        res.status(404).send();
     }
 })
 

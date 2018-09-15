@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-let AdicionalSchema = new mongoose.Schema({
-    descricao: {
+let AddonSchema = new mongoose.Schema({
+    description: {
         type: String,
         required: true
     },
-    valor: {
-        type: Number,
+    price: {
+        type: String,
         validate: {
-            validator: validator.isCurrency,
+            validator: function(){
+                return validator.isCurrency(this.price);
+            },
             message: '{VALUE} não é um valor válido.'
         },
         required: true
@@ -24,52 +26,54 @@ let AdicionalSchema = new mongoose.Schema({
         required: true
     },
     coverage:{
-        type: Number,
+        type: String,
         validate: {
-            validator: validator.isCurrency,
+            validator: function(){
+                return validator.isCurrency(this.price);
+            },
             message: '{VALUE} não é um valor válido'
         },
         required: function(){
             return this.tipo === 'insurance'
         }
     },
-    instituicao: {
+    school: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Instituicao',
+        ref: 'School',
         validate: {
-            validator: function (instituicao) {
-                const {Instituicao} = require('./escola');
-                return Instituicao.exists(instituicao);
+            validator: function (school) {
+                const {School} = require('./school');
+                return School.exists(school);
             },
             message: 'Escola inexistente'
         },
         required: false
     },
-    pais: {
+    country: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pais',
+        ref: 'Country',
         required: false,
         validate: {
-            validator: function (pais) {
-                const {Pais} = require('./pais');
-                return Pais.exists(pais);
+            validator: function (country) {
+                const {Country} = require('./country');
+                return Country.exists(country);
             },
             message: 'País inexistente'
         }
     }
 })
 
-AdicionalSchema.statics.exists = function (id) {
-    Adicional = this;
-    return Adicional.count({
+AddonSchema.statics.exists = function (id) {
+    Addon = this;
+    return Addon.count({
         _id: id
     }).then((count) => {
         return (count > 0);
     })
 }
 
-let Adicional = mongoose.model('Adicional', AdicionalSchema);
+let Addon = mongoose.model('Addon', AddonSchema);
 
 module.exports = {
-    Adicional
+    Addon, AddonSchema
 };

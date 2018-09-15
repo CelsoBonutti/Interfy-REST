@@ -2,30 +2,36 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const { authenticate } = require('../middleware/authenticate');
-const { Intensidade } = require('../models/intensidade');
+const { Intensity } = require('../models/intensity');
 
 
 router.post('/register', authenticate, (req, res) => {
-    let intensidade = _.pick(req.body, ['intensidades']).intensidades;
+    let intensity = _.pick(req.body, ['intensities']).intensities;
     if (req.isAdmin) {
-        Intensidade.create(intensidade).then((intensidade) => {
-            res.status(200).send(intensidade);
+        Intensity.create(intensity).then((intensity) => {
+            res.status(200).send();
         }, (e) => {
             res.status(400).send(e);
         })
+    }
+    else{
+        res.status(404).send();
     }
 })
 
 router.delete('/:id', authenticate, (req, res) => {
     let id = req.params.id;
     if (req.isAdmin) {
-        Intensidade.findById(id).then((intensidade) => {
-            intensidade.remove().then((intensidade) => {
-                res.status(200).send(intensidade);
+        Intensity.findById(id).then((intensity) => {
+            intensity.remove().then((intensity) => {
+                res.status(200).send(intensity);
             }, (e) => {
                 res.status(400).send(e);
             })
         })
+    }
+    else{
+        res.status(404).send();
     }
 })
 
