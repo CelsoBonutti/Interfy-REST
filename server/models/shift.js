@@ -46,7 +46,7 @@ const ShiftSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(intensity){
-                let { Intensity } = require('./intensity');
+                let { Intensity } = require('./Intensity');
                 return Intensity.exists(intensity);
             },
             message: 'Intensidade inexistente'

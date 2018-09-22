@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Intensity } = require('./intensity');
+const { Intensity } = require('./Intensity');
 
 let CourseSchema = new mongoose.Schema({
     title: {
@@ -17,7 +17,7 @@ let CourseSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(school){
-                let { School } = require('./school');  
+                let { School } = require('./School');  
                 return School.exists(school);
             },
             message: 'Escola inexistente'

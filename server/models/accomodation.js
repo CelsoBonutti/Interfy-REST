@@ -11,7 +11,7 @@ const AccomodationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    supplies: {
+    supplies: [{
         name:{
             type: String,
             required: true
@@ -30,7 +30,7 @@ const AccomodationSchema = new mongoose.Schema({
                 message: '{VALUE} não é um valor válido.'
             }
         }
-    },
+    }],
     dateRange:[{
         startDate:{
             type: Date

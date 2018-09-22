@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const AddressSchema = new mongoose.Schema({
     zip: {
-        type: Number,
+        type: String,
         required: true,
         minlength: 8,
         maxlength: 8
@@ -34,15 +34,15 @@ const AddressSchema = new mongoose.Schema({
 })
 
 const ContactSchema = new mongoose.Schema({
-    nome: {
+    name: {
         type: String,
         required: true
     },
-    parentesco: {
+    relationship: {
         type: String,
         required: true
     },
-    telefone: {
+    phone: {
         type: Number,
         required: true
     }

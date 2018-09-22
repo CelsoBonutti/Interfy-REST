@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const { authenticate } = require('../middleware/authenticate');
-const { Intensity } = require('../models/intensity');
+const { Intensity } = require('../models/Intensity');
 
 
 router.post('/register', authenticate, (req, res) => {

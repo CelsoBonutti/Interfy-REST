@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/authenticate');
 const _ = require('lodash');
-const { Exchange } = require('../models/exchange');
+const { Exchange } = require('../models/Exchange');
 
 //Retornar intercâmbios do usuário
 router.get('/', authenticate, (req, res) => {

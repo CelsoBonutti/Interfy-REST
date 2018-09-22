@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const { Shift } = require('../models/shift');
+const { Shift } = require('../models/Shift');
 const { authenticate } = require('../middleware/authenticate');
 
 router.post('/register', authenticate, (req, res) => {

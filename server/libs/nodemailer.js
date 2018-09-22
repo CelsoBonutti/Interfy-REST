@@ -89,7 +89,7 @@ Transporter.sendSoldExchangeMail = function(intercambio){
 }
 
 Transporter.sendRefusedPaymentMail = function(intercambio){
-    const { User } = require('../models/user');
+    const { User } = require('../models/User');
     
     User.findById(intercambio._userId).then((user)=>{
         let mailBody = {

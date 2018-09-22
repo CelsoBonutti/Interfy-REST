@@ -43,7 +43,8 @@ let UserSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    required: true
+    required: true,
+    default: false
   },
   verificationCode: {
     type: String,

@@ -6,7 +6,7 @@ const {
 } = require('../middleware/authenticate');
 const {
     School
-} = require('../models/school');
+} = require('../models/School');
 
 //Rotas de registro de escolas
 
