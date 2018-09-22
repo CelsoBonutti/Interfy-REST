@@ -13,33 +13,39 @@ const School = gql`
     }
 
     type School{
+        _id: ID
         name: String!
         country: String!
         city: String!
         photos: [String]!
         optionals: [Optional]!
-        infrastructure: String!
+        infrastructure: [String]!
         extras: [String]!
+        courses: [Course]
     }
 
     type Course{
         _id: ID
         title: String!
         description: String!
-        School: School!
+        school: School!
+        intensities: [Intensity]
     }
 
     type Intensity{
+        _id: ID
         description: String!
-        name: String!
+        title: String!
         school: School!
         course: Course!
+        shifts: [Shift]
     }
 
     type Shift{
+        _id: ID
         title: String!
         description: String!
-        duration: Duration!
+        duration: [Duration]!
         school: School!
         intensity: Intensity!
     }

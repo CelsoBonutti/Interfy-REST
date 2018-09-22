@@ -11,9 +11,9 @@ const {
 //Rotas de registro de escolas
 
 router.post('/register', authenticate, (req, res) => {
-    let school = _.pick(req.body, ['name', 'country', 'city', 'differentials', 'infrastructure', 'extras']);
+    let school = _.pick(req.body, ['name', 'country', 'city', 'optionals', 'infrastructure', 'extras', 'photos']);
 
-    let photos = req.files.path;
+    // let photos = req.files.path;
 
     if (req.isAdmin) {
         School.create(school).then((school) => {

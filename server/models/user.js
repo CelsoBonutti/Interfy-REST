@@ -37,9 +37,7 @@ let UserSchema = new mongoose.Schema({
   gender:{
     type: String,
     enum: ['M', 'F', 'O', 'N'],
-    required: true,
-    maxlength: 1,
-    minlength: 1
+    required: true
   },
   active: {
     type: Boolean,
@@ -50,7 +48,12 @@ let UserSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  isAdmin: {
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  isAdmin:{
     type: Boolean,
     default: false
   }

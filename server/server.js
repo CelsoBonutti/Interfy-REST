@@ -21,16 +21,16 @@ const {mongoose} = require('./libs/mongoose');
 const {ApolloServer} = require('apollo-server-express');
 
 //Modelos
-const Accomodation = require('./models/Accomodation')
-const Addon = require('./models/Addon')
-const Country = require('./models/Country')
-const Course = require('./models/Course')
-const Exchange = require('./models/Exchange')
-const Intensity = require('./models/Intensity')
-const School = require('./models/School')
-const Shift = require('./models/Shift')
-const User = require('./models/User')
-const UserInfo = require('./models/UserInfo')
+const {Accomodation} = require('./models/Accomodation')
+const {Addon} = require('./models/Addon')
+const {Country} = require('./models/Country')
+const {Course} = require('./models/Course')
+const {Exchange} = require('./models/Exchange')
+const {Intensity} = require('./models/Intensity')
+const {School} = require('./models/School')
+const {Shift} = require('./models/Shift')
+const {User} = require('./models/User')
+const {UserInfo} = require('./models/UserInfo')
 
 
 //Rotas
@@ -46,12 +46,20 @@ const shiftRoutes = require('./routes/shifts');
 const userRoutes = require('./routes/users');
 
 
+
+//Configuração dos pacotes
+const app = express();
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
 //Configuração do GraphQL
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 const server = new ApolloServer({
     typeDefs: typeDefs,
-    resolvers, resolvers,
+    resolvers: resolvers,
     context:{
         Accomodation,
         Addon,
@@ -69,13 +77,6 @@ const server = new ApolloServer({
 server.applyMiddleware({
     app
 })
-
-//Configuração dos pacotes
-const app = express();
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json());
 
 //Setando CORS
 app.use(function (req, res, next) {
@@ -101,7 +102,3 @@ app.use('/users', userRoutes);
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 })
-
-module.exports = {
-    app
-}

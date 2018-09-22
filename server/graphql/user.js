@@ -1,7 +1,7 @@
 const {gql} = require('apollo-server-express');
 
 const User = gql`
-enum gender{
+enum Gender{
     M,
     F,
     O,
@@ -14,7 +14,7 @@ type User{
     name: String!
     surname: String!
     phone: String!
-    gender: String!
+    gender: Gender!
     active: Boolean!
     verificationCode: String!
     isAdmin: Boolean!

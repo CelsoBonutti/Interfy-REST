@@ -7,7 +7,7 @@ let IntensitySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    name: {
+    title: {
         type: String,
         required: true
     },
@@ -17,7 +17,7 @@ let IntensitySchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(school){
-                const { School } = require('./school');     
+                const { School } = require('./School');     
                 return School.exists(school);
             },
             message: 'Escola inexistente'
