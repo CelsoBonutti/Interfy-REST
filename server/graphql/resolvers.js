@@ -3,7 +3,7 @@ const resolvers = {
         findSchool: (root, args, {School}) =>{
             return School.find().then((schools)=>{
                 return schools;
-            }) 
+            })
         }
     },
     School: {

@@ -7,9 +7,18 @@ const User = require('./user');
 
 const Query = gql`
     type Query{
-        findSchool: [School]
+        """
+        Memes irados
+        """
+        findSchool(name: String): [School]
     }
     `
+
+const Mutation = gql`
+    type Mutation{
+        userLogin(email: String!, password: String!): LoginResponse
+    }
+`
 
 const Schema = gql`
     schema{
