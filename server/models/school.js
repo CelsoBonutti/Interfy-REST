@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
-const { Course } = require('./Course');
+const { Course } = require('./course');
 
 let OptionalSchema = new mongoose.Schema({
     description: {

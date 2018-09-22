@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const { authenticate } = require('../middleware/authenticate');
-const { Addon } = require('../models/Addon');
+const { Addon } = require('../models/addon');
 
 router.post('/register', authenticate, (req, res) => {
     let body = _.pick(req.body, ['description', 'price', 'required', 'type', 'coverage', 'school', 'country']);

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const { Country } = require('../models/Country');
+const { Country } = require('../models/country');
 const { authenticate } = require('../middleware/authenticate');
 
 //Retornar informações do país
