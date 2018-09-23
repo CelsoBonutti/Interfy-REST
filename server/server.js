@@ -22,16 +22,16 @@ const {ApolloServer} = require('apollo-server-express');
 
 
 //Modelos
-const {Accomodation} = require('./models/Accomodation')
-const {Addon} = require('./models/Addon')
-const {Country} = require('./models/Country')
-const {Course} = require('./models/Course')
-const {Exchange} = require('./models/Exchange')
-const {Intensity} = require('./models/Intensity')
-const {School} = require('./models/School')
-const {Shift} = require('./models/Shift')
-const {User} = require('./models/User')
-const {UserInfo} = require('./models/UserInfo')
+const {Accomodation} = require('./models/accomodation')
+const {Addon} = require('./models/addon')
+const {Country} = require('./models/country')
+const {Course} = require('./models/course')
+const {Exchange} = require('./models/exchange')
+const {Intensity} = require('./models/intensity')
+const {School} = require('./models/school')
+const {Shift} = require('./models/shift')
+const {User} = require('./models/user')
+const {UserInfo} = require('./models/userInfo')
 
 
 //Rotas

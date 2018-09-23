@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
-const { Shift } = require('./Shift')
+const { Shift } = require('./shift')
 
 let IntensitySchema = new mongoose.Schema({
     description: {
@@ -17,7 +17,7 @@ let IntensitySchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(school){
-                const { School } = require('./School');     
+                const { School } = require('./school');     
                 return School.exists(school);
             },
             message: 'Escola inexistente'
@@ -29,7 +29,7 @@ let IntensitySchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(course){
-                const { Course } = require('./Course');
+                const { Course } = require('./course');
                 return Course.exists(course);
             },
             message: 'Curso inexistente'

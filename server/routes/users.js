@@ -4,7 +4,7 @@ const _ = require('lodash');
 const random = require('randomstring');
 const { ObjectID } = require('mongodb');
 const { authenticate } = require('../middleware/authenticate');
-const { User } = require('../models/User');
+const { User } = require('../models/user');
 const { createJWToken } = require('../libs/auth');
 
 //Registro de usuário

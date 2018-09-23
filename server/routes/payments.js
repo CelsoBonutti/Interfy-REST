@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const pagarme = require('pagarme');
-const { Exchange } = require('../models/Exchange');
+const { Exchange } = require('../models/exchange');
 
 router.post('/', (req, res) => {
     let postSignature = req.header('X-Hub-Signature');

@@ -6,7 +6,7 @@ const {
 } = require('../middleware/authenticate');
 const {
     Course
-} = require('../models/Course');
+} = require('../models/course');
 
 
 router.post('/register', authenticate, (req, res) => {

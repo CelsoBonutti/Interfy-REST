@@ -7,7 +7,7 @@ const {
 } = require('../middleware/authenticate');
 const {
     School
-} = require('../models/School');
+} = require('../models/school');
 
 process.env.AWS_ACCESS_KEY_ID='';
 process.env.S3_BUCKET ='';

@@ -8,6 +8,11 @@ enum Gender{
     N
 }
 
+enum Role{
+    user,
+    admin
+}
+
 type User{
     email: String!
     password: String!
@@ -17,7 +22,12 @@ type User{
     gender: Gender!
     active: Boolean!
     verificationCode: String!
-    isAdmin: Boolean!
+    role: Role!
+}
+
+type LoginResponse{
+    status: String!
+    content: String!
 }
 
 type Address{

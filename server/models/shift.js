@@ -37,7 +37,7 @@ const ShiftSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(school){
-                let { School } = require('./School');
+                let { School } = require('./school');
                 return School.exists(school);
             },
             message: 'Escola inexistente.'
@@ -49,7 +49,7 @@ const ShiftSchema = new mongoose.Schema({
         required: true,
         validate:{
             validator: function(intensity){
-                let { Intensity } = require('./Intensity');
+                let { Intensity } = require('./intensity');
                 return Intensity.exists(intensity);
             },
             message: 'Intensidade inexistente'
