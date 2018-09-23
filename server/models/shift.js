@@ -27,7 +27,10 @@ const ShiftSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    duration: [DurationSchema],
+    duration: [{
+        type: DurationSchema,
+        required: true
+    }],
     school: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'School',
