@@ -8,7 +8,7 @@ const User = require('./user');
 const Query = gql`
     type Query{
         """
-        Memes irados
+        Query de busca de escolas. TODO: Filtros
         """
         findSchool(name: String): [School]
     }
