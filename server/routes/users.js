@@ -9,7 +9,7 @@ const { createJWToken } = require('../libs/auth');
 
 //Registro de usuário
 router.post('/register', (req, res) => {
-    let body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'telefone', 'genero']);
+    let body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'phone', 'gender']);
     let user = new User(body);
     user.verificationCode = random.generate();
     user.active = false;
@@ -24,14 +24,14 @@ router.post('/register', (req, res) => {
 router.patch('/me', authenticate, (req, res) => {
     let id = req.id;
     let newPassword = _.pick(req.body, ['password']).password;
-    let novasInformacoes = _.pick(req.body, ['name', 'surname', 'telefone', 'genero']);
+    let newInfo = _.pick(req.body, ['name', 'surname', 'phone', 'gender']);
 
     if (!ObjectID.isValid(id)) {
         return res.status(404).send();
     }
 
     User.findByIdAndUpdate(id, {
-        $set: novasInformacoes
+        $set: newInfo
     }, {
         new: true
     }).then((user) => {
@@ -64,7 +64,7 @@ router.post('/login', (req, res) => {
         if (user.active) {
             res.header('x-auth', createJWToken(user)).status(200).send();
         } else {
-            res.status(401).json({
+            res.status(403).json({
                 message: 'Por favor, confirme seu e-mail.'
             });
         }

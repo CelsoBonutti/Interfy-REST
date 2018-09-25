@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const pagarme = require('pagarme');
-const { Intercambio } = require('../models/intercambios');
+const { Exchange } = require('../models/exchange');
 
 router.post('/', (req, res) => {
     let postSignature = req.header('X-Hub-Signature');
     pagarme.verifySignature(process.env.API_KEY, req.body, postSignature).then((valido) => {
         if (valido) {
-            Intercambio.find({transactionId: req.body.id}).then((intercambio)=>{
+            Exchange.find({transactionId: req.body.id}).then((intercambio)=>{
                 intercambio.status = req.body.id;
                 intercambio.save().then(()=>{
                     res.status(200).send();

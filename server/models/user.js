@@ -30,28 +30,28 @@ let UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  telefone:{
+  phone:{
     type: Number,
     required: true
   },
-  genero:{
+  gender:{
     type: String,
     enum: ['M', 'F', 'O', 'N'],
-    required: true,
-    maxlength: 1,
-    minlength: 1
+    required: true
   },
   active: {
     type: Boolean,
-    required: true
+    required: true,
+    default: false
   },
   verificationCode: {
     type: String,
     required: false
   },
-  isAdmin: {
-    type: Boolean,
-    default: false
+  role: {
+    type: String,
+    enum: ['USER', 'ADMIN'],
+    default: 'USER'
   }
 });
 
@@ -59,7 +59,7 @@ UserSchema.methods.toJSON = function () {
   let user = this;
   let userObject = user.toObject();
 
-  return _.pick(userObject, ['_id', 'email', 'name', 'surname', 'telefone', 'sexo']);
+  return _.pick(userObject, ['_id', 'email', 'name', 'surname', 'phone', 'sexo']);
 };
 
 UserSchema.pre('save', function (next) {

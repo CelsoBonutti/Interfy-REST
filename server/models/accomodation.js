@@ -11,7 +11,7 @@ const AccomodationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    supplies: {
+    supplies: [{
         name:{
             type: String,
             required: true
@@ -21,14 +21,16 @@ const AccomodationSchema = new mongoose.Schema({
             required: true
         },
         price:{
-            type: Number,
+            type: String,
             required: true,
             validate: {
-                validator: validator.isCurrency,
+                validator: function(){
+                    return validator.isCurrency(this.price);
+                },
                 message: '{VALUE} não é um valor válido.'
             }
         }
-    },
+    }],
     dateRange:[{
         startDate:{
             type: Date
@@ -43,16 +45,18 @@ const AccomodationSchema = new mongoose.Schema({
             }
         },
         price:{
-            type: Number,
+            type: String,
             validate: {
-                validator: validator.isCurrency,
-                message: '{VALUE} não é um valor válido'
+                validator: function(){
+                    return validator.isCurrency(this.price);
+                },
+                message: '{VALUE} não é um valor válido.'
             }
         }
     }],
     school: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Instituicao',
+        ref: 'School',
         required: true
     }
 })

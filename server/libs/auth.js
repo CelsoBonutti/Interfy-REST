@@ -21,7 +21,7 @@ function createJWToken(details){
         sub: details._id,
         name: details.name,
         surname: details.surname,
-        admin: details.isAdmin
+        role: details.role
     }, process.env.JWT_SECRET, {
         expiresIn: "1h",
         issuer: 'api.interfy.com.br',
