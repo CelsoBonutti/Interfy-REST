@@ -23,8 +23,8 @@ const Accomodation = gql`
     }
 
     enum RoomType{
-        Single,
-        Shared
+        single,
+        shared
     }
 `;
 

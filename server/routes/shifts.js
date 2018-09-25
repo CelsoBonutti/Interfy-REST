@@ -5,7 +5,7 @@ const { Shift } = require('../models/shift');
 const { authenticate } = require('../middleware/authenticate');
 
 router.post('/register', authenticate, (req, res) => {
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         let shift = _.pick(req.body, ['shifts']).shifts;
         Shift.create(shift).then((shift) => {
             res.status(200).send();
@@ -19,7 +19,7 @@ router.post('/register', authenticate, (req, res) => {
 })
 
 router.delete('/:id', authenticate, (req, res) => {
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         let id = req.params.id;
         Shift.findByIdAndRemove(id).then((shift) => {
             res.status(200).send(shift);

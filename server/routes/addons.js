@@ -8,7 +8,7 @@ router.post('/register', authenticate, (req, res) => {
     let body = _.pick(req.body, ['description', 'price', 'required', 'type', 'coverage', 'school', 'country']);
     let addon = new Addon(body);
 
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         addon.save().then((addon) => {
             res.status(200).send(addon);
         }, (err) => {

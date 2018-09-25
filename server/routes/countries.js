@@ -19,7 +19,7 @@ router.post('/register', authenticate, (req, res) => {
     let body = _.pick(req.body, ['name', 'acronym', 'capital', 'continent', 'languages', 'currency', 'description', 'visa', 'climate', 'tips']);
     let country = new Country(body);
 
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         country.save().then((country) => {
             res.status(200).send(country);
         }, () => {

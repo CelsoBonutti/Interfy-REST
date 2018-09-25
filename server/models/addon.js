@@ -42,7 +42,7 @@ let AddonSchema = new mongoose.Schema({
         ref: 'School',
         validate: {
             validator: function (school) {
-                const {School} = require('./school');
+                const {School} = require('./School');
                 return School.exists(school);
             },
             message: 'Escola inexistente'

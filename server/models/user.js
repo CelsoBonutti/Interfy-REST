@@ -50,12 +50,8 @@ let UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
-  },
-  isAdmin:{
-    type: Boolean,
-    default: false
+    enum: ['USER', 'ADMIN'],
+    default: 'USER'
   }
 });
 

@@ -20,7 +20,6 @@ const port = process.env.PORT;
 const {mongoose} = require('./libs/mongoose');
 const {ApolloServer} = require('apollo-server-express');
 
-
 //Modelos
 const {Accomodation} = require('./models/accomodation')
 const {Addon} = require('./models/addon')
@@ -56,12 +55,17 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 //Configuração do GraphQL
+const requireAuthDirective = require('./directives/auth')
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 const server = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
-    context:{
+    schemaDirectives: {
+        requireAuth: requireAuthDirective
+    },
+    context:({req, res}) => ({
+        token: req.headers['x-auth'],
         Accomodation,
         Addon,
         Country,
@@ -71,8 +75,8 @@ const server = new ApolloServer({
         School,
         Shift,
         User,
-        UserInfo
-    }
+        UserInfo,
+    })
 })
 
 server.applyMiddleware({

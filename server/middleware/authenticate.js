@@ -5,7 +5,7 @@ let authenticate = (req, res, next) => {
 
   verifyJWToken(token).then((decoded) =>{
     req.id = decoded.sub;
-    req.isAdmin = decoded.admin.toString();
+    req.role = decoded.role;
     req.name = decoded.name;
     req.surname = decoded.surname;
     next();

@@ -9,8 +9,8 @@ enum Gender{
 }
 
 enum Role{
-    user,
-    admin
+    USER,
+    ADMIN
 }
 
 type User{
@@ -23,6 +23,7 @@ type User{
     active: Boolean!
     verificationCode: String!
     role: Role!
+    info: UserInfo
 }
 
 type LoginResponse{

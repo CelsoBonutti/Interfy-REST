@@ -7,7 +7,7 @@ const { Intensity } = require('../models/intensity');
 
 router.post('/register', authenticate, (req, res) => {
     let intensity = _.pick(req.body, ['intensities']).intensities;
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         Intensity.create(intensity).then((intensity) => {
             res.status(200).send();
         }, (e) => {
@@ -21,7 +21,7 @@ router.post('/register', authenticate, (req, res) => {
 
 router.delete('/:id', authenticate, (req, res) => {
     let id = req.params.id;
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         Intensity.findById(id).then((intensity) => {
             intensity.remove().then((intensity) => {
                 res.status(200).send(intensity);

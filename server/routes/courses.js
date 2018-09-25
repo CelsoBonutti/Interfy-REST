@@ -12,7 +12,7 @@ const {
 router.post('/register', authenticate, (req, res) => {
     let course = _.pick(req.body, ['courses']).courses;
 
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         Course.create(course).then((course) => {
             res.status(200).send(course);
         }, (e) => {
@@ -26,7 +26,7 @@ router.post('/register', authenticate, (req, res) => {
 router.delete('/:id', authenticate, (req, res) => {
     let id = req.params.id;
 
-    if (req.isAdmin) {
+    if (req.role === "ADMIN") {
         Course.findById(id).then((course) => {
             course.remove().then((course) => {
                 res.status(200).send(course);
