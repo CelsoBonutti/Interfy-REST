@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
+const random = require('randomstring');
 
 let UserSchema = new mongoose.Schema({
   email: {
@@ -46,7 +47,8 @@ let UserSchema = new mongoose.Schema({
   },
   verificationCode: {
     type: String,
-    required: false
+    required: true,
+    default: random.generate()
   },
   role: {
     type: String,

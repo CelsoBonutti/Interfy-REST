@@ -14,7 +14,7 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
             return verifyJWToken(ctx.token).then((decoded)=>{
                 if(decoded){
                     if(role && (decoded.role != role))
-                        throw new AuthenticationError("Erro de autenticação.");
+                        throw new AuthenticationError("Erro de autorização.");
                     else{
                         args[2].userId = decoded.sub;
                         return resolve.apply(this, args).then((result)=>{return result})

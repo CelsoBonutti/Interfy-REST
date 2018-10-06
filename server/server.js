@@ -1,4 +1,6 @@
 //Configuração das variáveis de ambiente
+require('dotenv').config();
+
 const env = process.env.NODE_ENV || 'development';
 
 console.log('env *****', env);

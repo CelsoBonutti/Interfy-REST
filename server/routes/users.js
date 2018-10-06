@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const random = require('randomstring');
 const { ObjectID } = require('mongodb');
 const { authenticate } = require('../middleware/authenticate');
 const { User } = require('../models/user');
@@ -11,8 +10,6 @@ const { createJWToken } = require('../libs/auth');
 router.post('/register', (req, res) => {
     let body = _.pick(req.body, ['email', 'password', 'name', 'surname', 'phone', 'gender']);
     let user = new User(body);
-    user.verificationCode = random.generate();
-    user.active = false;
     user.save().then(() => {
         res.status(200).send();
     }).catch((e) => {

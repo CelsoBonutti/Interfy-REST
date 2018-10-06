@@ -10,7 +10,7 @@ const Query = gql`
         """
         Query de busca de escolas. TODO: Filtros
         """
-        findSchool(name: String): [School]
+        findSchool(country: String!, city: String): [School]
         
         """
         Query de busca de cursos. TODO: Filtros
@@ -28,6 +28,10 @@ const Query = gql`
         """
         getUser: [User] @requireAuth
 
+        """
+        Query para pegar lista de países.
+        """
+        getCountries: [Country]
     }
     `
 
@@ -35,6 +39,8 @@ const Mutation = gql`
     type Mutation{
         """Mutation para inserir escola."""
         addSchool(name: String!, country: String!, city: String!, photos: [String]!, optionals: [OptionalInput]!, infrastructure: [String]!, extras: [String]!): School @requireAuth(role: ADMIN)
+        """Mutation para inserir país."""
+        addCountry(name: String!, acronym: String!, capital: String!, continent: String!, languages: [String]!, currency: String!, description: String!, visa: [VisaInput]!, climate:[ClimateInput]!, tips: String!): Country @requireAuth(role: ADMIN)
         """Mutation para remover escola."""
         deleteSchool(_id: ID): School @requireAuth(role: ADMIN)
         """Mutation para remover curso."""
@@ -43,6 +49,10 @@ const Mutation = gql`
         deleteIntensity(_id: ID): Intensity @requireAuth(role: ADMIN)
         """Mutation para remover turno."""
         deleteShift(_id: ID): Shift @requireAuth(role: ADMIN)
+        """Registro"""
+        userRegistration(email: String!, password: String!, name: String!, surname: String!, phone: String!, gender: Gender!): User
+        """Mutation para logar"""
+        userLogin(email: String!, password: String!): String
     }
 `
 

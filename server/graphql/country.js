@@ -10,7 +10,21 @@ const Country = gql`
         maxTemp: Float!
     }
 
+    input ClimateInput{
+        description: String!
+        season: String!
+        months: String!
+        weather: String!
+        minTemp: Float!
+        maxTemp: Float!
+    }
+
     type Visa{
+        description: String!
+        difficulty: Int!
+    }
+
+    input VisaInput{
         description: String!
         difficulty: Int!
     }

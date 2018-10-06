@@ -97,7 +97,7 @@ const School = gql`
     }
 
     """
-    Modelo para inserir turno. Necessário por MongoDB é uma bosta.
+    Modelo para inserir turno. Necessário pois MongoDB é uma bosta.
     """
     input ShiftInput{
         title: String!

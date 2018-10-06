@@ -1,7 +1,14 @@
+const {AuthenticationError} = require("apollo-server-express");
+const {createJWToken} = require('../libs/auth');
+
 const resolvers = {
     Query: {
         findSchool: (root, args, {School}) =>{
-            return School.find().then(schools => schools);
+            query = {country: args.country}
+            if(args.city){
+                query = {...query, city: args.city}
+            }
+            return School.find(query).then(schools => schools);
         },
         findCourses: (root, args, {Course}) =>{
             return Course.find(args).then(courses => courses);
@@ -11,12 +18,19 @@ const resolvers = {
         },
         getUser: (root, args, context) =>{
             return context.User.find({_id: context.userId}).then(user => user);
+        },
+        getCountries: (root, args, {Country}) =>{
+            return Country.find().then(countries=>countries);
         }
     },
     Mutation:{
         addSchool: (root, args, {School}) =>{
             const school = new School(args);
             return school.save().then(school => school);
+        },
+        addCountry: (root, args, {Country}) =>{
+            const country = new Country(args);
+            return country.save().then(country=>country);
         },
         deleteSchool: (root, args, {School}) =>{
             return School.findByIdAndDelete(args._id).then(school => school)
@@ -29,6 +43,23 @@ const resolvers = {
         },
         deleteShift: (root, args, {Shift}) =>{
             return Shift.findByIdAndDelete(args._id).then(shift => shift)
+        },
+        userRegistration: (root, args, {User}) =>{
+            const user = new User(args);
+            return user.save().then(user=>user);
+        },
+        userLogin: (root, args, {User}) =>{
+            return User.findByCredentials(args.email, args.password).then((user) => {
+                if (user.active) {
+                    return createJWToken(user);
+                } else {
+                    throw new AuthenticationError("Por favor, ative seu e-mail.");
+                }
+            }, () => {
+                throw new AuthenticationError("Usuário ou senha incorretos");
+            }).catch((e) => {
+                throw new AuthenticationError(e);
+            })
         }
     },
     School: {
