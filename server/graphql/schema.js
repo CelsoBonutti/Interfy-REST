@@ -10,7 +10,7 @@ const Query = gql`
         """
         Query de busca de escolas. TODO: Filtros
         """
-        findSchool(country: String!, city: String): [School]
+        findSchool(country: String!, city: String, _id: ID): [School]
         
         """
         Query de busca de cursos. TODO: Filtros
