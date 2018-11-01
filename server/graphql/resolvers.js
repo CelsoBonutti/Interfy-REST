@@ -10,6 +10,9 @@ const resolvers = {
             }
             return School.find(query).then(schools => schools);
         },
+        getSchoolInfo: (root, args, {School}) =>{
+            return School.findById(args.id).then(school=>school);
+        },
         findCourses: (root, args, {Course}) =>{
             return Course.find(args).then(courses => courses);
         },

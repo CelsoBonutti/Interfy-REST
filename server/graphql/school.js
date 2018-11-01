@@ -5,7 +5,7 @@ const School = gql`
     Modelo para inserir duração. Necessário pois MongoDB é uma bosta.
     """
     input DurationInput{
-        numberOfWeeks: Int!
+        numberOfWeeks: [Int]!
         price: String!
         dates: [String]!
     }
@@ -14,7 +14,7 @@ const School = gql`
     Modelo para duração, utilizado para informar de forma dinâmica as opções de duração de curso que um aluno terá.
     """
     type Duration{
-        numberOfWeeks: Int!
+        numberOfWeeks: [Int]!
         price: String!
         dates: [String]!
     }

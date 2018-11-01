@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const DurationSchema = new mongoose.Schema({
-    numberOfWeeks:{
+    numberOfWeeks:[{
         type: Number,
         required: true
-    },
+    }],
     price:{
         type: String,
         required: true,
