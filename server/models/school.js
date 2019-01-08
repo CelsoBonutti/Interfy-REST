@@ -58,7 +58,11 @@ SchoolSchema.pre('validate', function(next){
     if(!this.slug){
         const slugify = require('slugify');
         let school = this;
-        this.slug = slugify(this.name);
+        this.slug = slugify(this.name, {
+            replacement: '-',
+            remove: null,
+            lower: true
+          });
     }
     next();
 })
