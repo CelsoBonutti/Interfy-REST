@@ -54,7 +54,7 @@ let SchoolSchema = new mongoose.Schema({
     }
 })
 
-SchoolSchema.pre('save', function(next){
+SchoolSchema.pre('validate', function(next){
     if(!this.slug){
         const slugify = require('slugify');
         let school = this;
