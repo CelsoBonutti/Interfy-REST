@@ -11,7 +11,12 @@ const resolvers = {
             return School.find(query).then(schools => schools);
         },
         getSchoolInfo: (root, args, {School}) =>{
-            return School.findById(args.id).then(school=>school);
+            if(args.id)
+                return School.findById(args.id).then(school=>school);
+            else if(args.slug)
+                return School.findOne({slug: args.slug}).then(school=>school);
+            else
+                return
         },
         findCourses: (root, args, {Course}) =>{
             return Course.find(args).then(courses => courses);

@@ -44,13 +44,14 @@ const School = gql`
         optionals: [Optional]!
         infrastructure: [String]!
         extras: [String]!
+        slug: String!
         courses(title: String): [Course]
         """Pseudo-mutation para adicionar cursos."""
         addCourses(courses: [CourseInput]!): [Course] @requireAuth(role: ADMIN)
     }
 
     """
-    Modelo para inserir cursos. Necessário por MongoDB é uma bosta.
+    Modelo para inserir cursos. Necessário pois MongoDB é uma bosta.
     """
     input CourseInput{
         title: String!

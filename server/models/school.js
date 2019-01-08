@@ -47,7 +47,20 @@ let SchoolSchema = new mongoose.Schema({
     extras: [{
         type: String,
         required: true
-    }]
+    }],
+    slug: {
+        type: String,
+        required: true
+    }
+})
+
+SchoolSchema.pre('save', function(next){
+    if(!this.slug){
+        const slugify = require('slugify');
+        let school = this;
+        this.slug = slugify(this.name);
+    }
+    next();
 })
 
 SchoolSchema.pre('remove', function(next){

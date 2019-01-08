@@ -16,7 +16,7 @@ const Query = gql`
         """
         Query de informação de escola.
         """
-        getSchoolInfo(id: ID): School
+        getSchoolInfo(id: ID, slug: String): School
         
         """
         Query de busca de cursos. TODO: Filtros
