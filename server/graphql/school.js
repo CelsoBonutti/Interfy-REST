@@ -44,7 +44,7 @@ const School = gql`
         optionals: [Optional]!
         infrastructure: [String]!
         extras: [String]!
-        slug: String!
+        slug: String
         courses(title: String): [Course]
         """Pseudo-mutation para adicionar cursos."""
         addCourses(courses: [CourseInput]!): [Course] @requireAuth(role: ADMIN)
