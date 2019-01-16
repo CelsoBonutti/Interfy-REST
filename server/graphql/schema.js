@@ -9,8 +9,9 @@ const Query = gql`
     type Query{
         """
         Query de busca de escolas. TODO: Filtros
-        """
-        findSchool(name: String): [School]
+        """  
+        hello: [Schoolhud]!
+        findSchool: [Schoolhud]!
         
         """
         Query de busca de cursos. TODO: Filtros

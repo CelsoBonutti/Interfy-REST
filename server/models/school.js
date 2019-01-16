@@ -50,6 +50,9 @@ let SchoolSchema = new mongoose.Schema({
     }]
 })
 
+
+
+
 SchoolSchema.pre('remove', function(next){
     let school = this;
     Course.find({school: school._id}).then((course)=>{

@@ -49,6 +49,10 @@ const School = gql`
         addCourses(courses: [CourseInput]!): [Course] @requireAuth(role: ADMIN)
     }
 
+    type Schoolhud{
+        name: String!
+        country: String!
+    }
     """
     Modelo para inserir cursos. Necessário por MongoDB é uma bosta.
     """

@@ -89,19 +89,19 @@ Transporter.sendSoldExchangeMail = function(intercambio){
 }
 
 Transporter.sendRefusedPaymentMail = function(intercambio){
-    const { User } = require('../models/user');
+   // const { User } = require('../models/user');
     
-    User.findById(intercambio._userId).then((user)=>{
-        let mailBody = {
-            from: `"Interfy" <${process.env.MAIL_USR}>`,
-            to: email,
-            subject: 'Interfy: Seu pagamento foi recusado.',
-            html: `Olá, ${user.name} ${user.surname}.
-            Infelizmente, o pagamento de seu intercâmbio não pode ser aprovado.`
-        }
-    })
+   // User.findById(intercambio._userId).then((user)=>{
+     //   let mailBody = {
+     //       from: `"Interfy" <${process.env.MAIL_USR}>`,
+    //        to: email,
+    //        subject: 'Interfy: Seu pagamento foi recusado.',
+   //         html: `Olá, ${user.name} ${user.surname}.
+    //        Infelizmente, o pagamento de seu intercâmbio não pode ser aprovado.`
+  //      }
+  //  })
 
-    Transporter.sendMail(mailBody);
+   // Transporter.sendMail(mailBody);
 }
 
 module.exports = { Transporter };
