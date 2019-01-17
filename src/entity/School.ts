@@ -2,6 +2,7 @@ import {Entity, PrimaryGeneratedColumn, Column,OneToMany,ManyToOne} from "typeor
 import {Course} from "./Course";
 import { Intensity } from "./Intensity";
 import { Accomodation } from "./Accomodation";
+import { Addon } from "./Addon";
 @Entity()
  export class School {
 
@@ -32,22 +33,25 @@ import { Accomodation } from "./Accomodation";
     @OneToMany(type => Intensity, Intensity => Intensity.school)
     intensity:Intensity[];
 
-    @OneToMany(type => OptionalSchema, OptionalSchema => OptionalSchema.School)
-    optionals:OptionalSchema[];
+    @OneToMany(type => Optional, Optional => Optional.School)
+    optionals:Optional[];
 
     @OneToMany(type => Course, Course => Course.school)
     course:Course[];
 
     @OneToMany(type => Accomodation, Accomodation => Accomodation.school)
     accomodation:Accomodation[];
+
+    @OneToMany(type => Addon, Addon => Addon.school)
+    addon:Addon[];
 }
 @Entity()
-export class OptionalSchema {
+export class Optional {
     
     @PrimaryGeneratedColumn()
     id: number;
     
-    @ManyToOne(type => School, School => School.id)
+    @ManyToOne(type => School, School => School.optionals)
     School: School;
     
     @Column()

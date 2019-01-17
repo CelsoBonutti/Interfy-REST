@@ -4,6 +4,12 @@ import {School} from "../src/entity/School";
 import {Accomodation} from "../src/entity/Accomodation";
 import {Course} from "../src/entity/Course";
 import {Intensity} from "../src/entity/Intensity";
+import {Country} from "../src/entity/Country";
+import {Addon} from "../src/entity/Addon";
+import {User} from "../src/entity/User";
+import {Shift} from "../src/entity/Shift";
+import {UserInfo} from "../src/entity/UserInfo";
+import {Exchange} from "../src/entity/Exchange";
 //Configuração das variáveis de ambiente
 const env = process.env.NODE_ENV || 'development';
 
@@ -28,15 +34,15 @@ const {ApolloServer} = require('apollo-server-express');
 
 //Modelos
 //const {Accomodation} = require('../server/models/accomodation')
-const {Addon} = require('../server/models/addon')
-const {Country} = require('../server/models/country')
+//const {Addon} = require('../server/models/addon')
+//const {Country} = require('../server/models/country')
 //const {Course} = require('../server/models/course')
-const {Exchange} = require('../server/models/exchange')
+//const {Exchange} = require('../server/models/exchange')
 //const {Intensity} = require('../server/models/intensity')
 //const {School} = require('../server/models/school')
-const {Shift} = require('../server/models/shift')
+//const {Shift} = require('../server/models/shift')
 //const {User} = require('../server/models/user')
-const {UserInfo} = require('../server/models/userInfo')
+//const {UserInfo} = require('../server/models/userInfo')
 
 
 //Rotas
@@ -84,6 +90,7 @@ const server = new ApolloServer({
         School,
         Shift,
         UserInfo,
+        User
     })
 })
 
