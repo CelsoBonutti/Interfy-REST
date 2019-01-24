@@ -7,6 +7,7 @@ const User = require('./user');
 
 const Query = gql`
     type Query{
+        
         """
         Query de busca de escolas. TODO: Filtros
         """  
@@ -34,6 +35,8 @@ const Query = gql`
 
 const Mutation = gql`
     type Mutation{
+        addCountry(data:inputCountry!):Country!
+
         """Mutation para inserir escola."""
         addSchool(name: String!, country: String!, city: String!, photos: [String]!, optionals: [OptionalInput]!, infrastructure: [String]!, extras: [String]!): School @requireAuth(role: ADMIN)
         """Mutation para remover escola."""

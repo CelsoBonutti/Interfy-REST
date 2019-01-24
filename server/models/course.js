@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const { Intensity } = require('./intensity');
 
 let CourseSchema = new mongoose.Schema({
@@ -46,3 +46,4 @@ CourseSchema.statics.exists = function(id){
 let Course = mongoose.model('Course', CourseSchema);
 
 module.exports = { Course, CourseSchema };
+*/

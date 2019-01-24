@@ -46,7 +46,7 @@ const {ApolloServer} = require('apollo-server-express');
 
 
 //Rotas
-const addonRoutes = require('../server/routes/addons');
+/*const addonRoutes = require('../server/routes/addons');
 const courseRoutes = require('../server/routes/courses');
 const schoolRoutes = require('../server/routes/schools');
 const informationRoutes = require('../server/routes/userInfo');
@@ -55,8 +55,7 @@ const exchangeRoutes = require('../server/routes/exchanges');
 const paymentRoutes = require('../server/routes/payments');
 const countryRoutes = require('../server/routes/countries');
 const shiftRoutes = require('../server/routes/shifts');
-const userRoutes = require('../server/routes/users');
-
+const userRoutes = require('../server/routes/users');*/
 
 createConnection().then(async connection => {
 //Configuração dos pacotes
@@ -108,6 +107,7 @@ app.use(function (req, res, next) {
 });
 
 //Configuração das rotas
+/*
 app.use('/addons', addonRoutes);
 app.use('/courses', courseRoutes);
 app.use('/schools', schoolRoutes);
@@ -117,7 +117,7 @@ app.use('/exchanges', exchangeRoutes);
 app.use('/pagamentos', paymentRoutes);
 app.use('/countries', countryRoutes);
 app.use('/shifts', shiftRoutes);
-app.use('/users', userRoutes);
+app.use('/users', userRoutes);*/
 
 
 app.listen(port, () => {

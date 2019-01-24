@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const validator = require('validator');
 
 let AddonSchema = new mongoose.Schema({
@@ -76,4 +76,4 @@ let Addon = mongoose.model('Addon', AddonSchema);
 
 module.exports = {
     Addon, AddonSchema
-};
+};*/

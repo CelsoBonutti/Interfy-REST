@@ -19,14 +19,18 @@ import {School} from "./School";
     @Column()
     name: string;
 
-    @OneToMany(type => Supplies, Supplies => Supplies.accomodation)
+    @OneToMany(type => Supplies, Supplies => Supplies.accomodation ,{
+        cascade: true,
+    })
     supplies: Supplies[];
 
     @OneToOne(type => School)
     @JoinColumn()
     school: School;
 
-    @OneToMany(type => DateRange, DateRange => DateRange.accomodation)
+    @OneToMany(type => DateRange, DateRange => DateRange.accomodation,{
+        cascade: true,
+    })
     dateRange: DateRange[];
 }
 

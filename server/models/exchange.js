@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const validator = require('validator');
 
 let ExchangeSchema = new mongoose.Schema({
@@ -106,4 +106,4 @@ ExchangeSchema.statics.findByUserIdAndPopulate = function (userId) {
 
 let Exchange = mongoose.model('Exchange', ExchangeSchema);
 
-module.exports = { Exchange };
+module.exports = { Exchange };*/

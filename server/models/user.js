@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const validator = require('validator');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
@@ -121,3 +121,4 @@ UserSchema.statics.findByCredentials = function (email, password) {
 let User = mongoose.model('User', UserSchema);
 
 module.exports = { User }
+*/

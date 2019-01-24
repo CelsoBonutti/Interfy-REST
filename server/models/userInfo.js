@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 
 const AddressSchema = new mongoose.Schema({
     zip: {
@@ -108,4 +108,4 @@ UserInfoSchema.statics.findByUserId = function (userId) {
 
 const UserInfo = mongoose.model('UserInfo', UserInfoSchema);
 
-module.exports = { UserInfo }
+module.exports = { UserInfo }*/

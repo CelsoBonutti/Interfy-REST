@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const validator = require('validator');
 
 const AccomodationSchema = new mongoose.Schema({
@@ -63,4 +63,4 @@ const AccomodationSchema = new mongoose.Schema({
 
 const Accomodation = mongoose.model('Accomodation', AccomodationSchema);
 
-module.exports = { Accomodation };
+module.exports = { Accomodation };*/

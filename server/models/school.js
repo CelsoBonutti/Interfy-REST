@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const _ = require('lodash');
 const { Course } = require('./course');
 
@@ -85,4 +85,4 @@ SchoolSchema.statics.upload = function(arquivo){
 
 let School = mongoose.model('School', SchoolSchema);
 
-module.exports = { School, SchoolSchema };
+module.exports = { School, SchoolSchema };*/

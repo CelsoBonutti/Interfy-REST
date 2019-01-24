@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const _ = require('lodash');
 const { Shift } = require('./shift')
 
@@ -58,3 +58,4 @@ IntensitySchema.statics.exists = function(id){
 let Intensity = mongoose.model('Intensity', IntensitySchema);
 
 module.exports = { Intensity };
+*/

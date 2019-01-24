@@ -26,19 +26,19 @@ export class Country {
         enum: [
             "Mandarim",
             "Espanhol",
-            "Inglês",
+            "Ingles",
             "Bengali",
-            "Português",
+            "Portugues",
             "Russo",
-            "Japonês",
-            "Alemão",
-            "Chinês",
-            "Javanês",
+            "Japones",
+            "Alemao",
+            "Chines",
+            "Javanes",
             "Coreano",
-            "Francês",
+            "Frances",
             "Vietnamita",
             "Telugo",
-            "Cantonês",
+            "Cantones",
             "Marati",
             "Tamil",
             "Turco",
@@ -49,19 +49,19 @@ export class Country {
     })
     languages:  "Mandarim"|
     "Espanhol"|
-    "Inglês"|
+    "Ingles"|
     "Bengali"|
-    "Português"|
+    "Portugues"|
     "Russo"|
-    "Japonês"|
-    "Alemão"|
-    "Chinês"|
-    "Javanês"|
+    "Japones"|
+    "Alemao"|
+    "Chines"|
+    "Javanes"|
     "Coreano"|
-    "Francês"|
+    "Frances"|
     "Vietnamita"|
     "Telugo"|
-    "Cantonês"|
+    "Cantones"|
     "Marati"|
     "Tamil"|
     "Turco"|
@@ -77,10 +77,14 @@ export class Country {
     @Column()
     tips: string;
     
-    @OneToMany(type => Visa, Visa => Visa.country)
+    @OneToMany(type => Visa, Visa => Visa.country,{
+        cascade: true,
+    })
     visa:Visa[];
 
-    @OneToMany(type => Climate, Climate => Climate.country)
+    @OneToMany(type => Climate, Climate => Climate.country,{
+        cascade: true,
+    })
     climate:Climate[];
 }
 

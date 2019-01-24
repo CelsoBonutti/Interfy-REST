@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 
 const ClimateSchema = new mongoose.Schema({
     description: {
@@ -101,3 +101,4 @@ const Country = mongoose.model('Country', CountrySchema);
 module.exports = {
     Country
 };
+*/

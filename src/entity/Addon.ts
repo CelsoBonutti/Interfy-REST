@@ -30,7 +30,9 @@ import { School } from "./School";
     })
     type: 'visa' | 'material' | 'insurance' ;
 
-    @ManyToOne(type => School, School => School.addon)
+    @ManyToOne(type => School, School => School.addon,{
+        cascade: true,
+    })
     school: School;
 
     @OneToOne(type => Country)

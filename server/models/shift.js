@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 const validator = require('validator');
 
 const DurationSchema = new mongoose.Schema({
@@ -60,3 +60,4 @@ const ShiftSchema = new mongoose.Schema({
 const Shift = mongoose.model('Shift', ShiftSchema);
 
 module.exports = { Shift };
+*/
