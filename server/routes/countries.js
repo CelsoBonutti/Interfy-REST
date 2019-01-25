@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const { Country } = require('../models/country');
@@ -31,4 +31,4 @@ router.post('/register', authenticate, (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = router;*/

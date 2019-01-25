@@ -85,13 +85,25 @@ const resolvers  =  {
         }
     },
     Country: {
-        visa: (root, args, { Visa }) => {
-            const  CountryRepository =  getManager().getRepository(Country);
-            return CountryRepository.find({ relations: ["visa"] }).then(resolve=>resolve);        
+        visa: (root, args, { _ }) => {
+            const  visaRepository =  getManager().getRepository(Visa)
+            const dados = visaRepository.find({ countryid:root.id}).then(function(value) {
+                return value; 
+              }, function(error) {
+                console.log(error); 
+              });
+
+              return dados;
         },
-        climate: (root, args, { Climate }) => {
-            const  CountryRepository =  getManager().getRepository(Country);
-            return CountryRepository.find({ relations: ["climate"] }).then(resolve=>resolve);        
+        climate: (root, args, { _ }) => {
+            const  climateRepository =  getManager().getRepository(Climate);
+            const dados = climateRepository.find({ countryid:root.id}).then(function(value) {
+                return value; 
+              }, function(error) {
+                console.log(error); 
+              });
+
+              return dados;
         },
     },
     School: {

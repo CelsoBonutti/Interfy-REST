@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const aws = require('aws-sdk');
 const router = express.Router();
 const _ = require('lodash');
@@ -75,4 +75,4 @@ router.get('/upload', (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports = router;*/

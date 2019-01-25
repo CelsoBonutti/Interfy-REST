@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const {
@@ -39,4 +39,4 @@ router.delete('/:id', authenticate, (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = router;*/
